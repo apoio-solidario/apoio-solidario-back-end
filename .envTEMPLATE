@@ -1,0 +1,20 @@
+# API Configuration
+API_CORS=<cors>
+API_NAME=<name>
+API_PORT=<port>
+CONTEXT_PATH=<context_url_base>
+
+# Database Configuration
+DB_HOST=<host>
+DB_PORT=<port>
+DB_NAME=<name>
+DB_USER=<user>
+DB_PASSWORD=<password>
+DB_TYPE=<type>
+DB_DRIVER=<drive>
+
+# Application Profile
+PROFILE=<profile>
+
+# Swagger Configuration
+SWAGGER_LINK=<swagger_link>

@@ -1,0 +1,30 @@
+server:
+  port: ${API_PORT}
+  servlet:
+    context-path: ${CONTEXT_PATH}
+spring:
+  application:
+    name: ${API_NAME}
+  web:
+    cors:
+      allowed-origins: ${API_CORS}
+  datasource:
+    url: jdbc:${DB_TYPE}://${DB}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+  # Configurações de JPA/Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  # Configurações de perfil ativo
+  profiles:
+    active: ${PROFILE}
+
+# Configurações do swagger
+springdoc:
+  swagger-ui:
+    path=/swagger-ui:
+      html: ${SWAGGER_LINK}
