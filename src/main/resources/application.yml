@@ -9,21 +9,21 @@ spring:
     cors:
       allowed-origins: ${API_CORS}
   datasource:
-    url: jdbc:${DB_TYPE}://${DB}:${DB_PORT}/${DB_NAME}
+    url: jdbc:${DB_TYPE}://${DB_HOST}:${DB_PORT}/${DB_NAME}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
 
-  # Configurações de JPA/Hibernate
+  # Configuraï¿½ï¿½es de JPA/Hibernate
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
 
-  # Configurações de perfil ativo
+  # Configuraï¿½ï¿½es de perfil ativo
   profiles:
     active: ${PROFILE}
 
-# Configurações do swagger
+# Configuraï¿½ï¿½es do swagger
 springdoc:
   swagger-ui:
     path=/swagger-ui:
