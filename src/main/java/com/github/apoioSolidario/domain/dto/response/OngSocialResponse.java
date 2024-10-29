@@ -1,0 +1,4 @@
+package com.github.apoioSolidario.domain.dto.response;
+
+public class OngSocialResponse {
+}
