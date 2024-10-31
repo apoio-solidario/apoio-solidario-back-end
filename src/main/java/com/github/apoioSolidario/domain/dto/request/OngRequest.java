@@ -24,6 +24,7 @@ public class OngRequest {
     @Size(max = 100)
     private String name;
     @NotBlank
+    @Size(min = 5)
     private String description;
     @Size(max = 255)
     private String websiteUrl;

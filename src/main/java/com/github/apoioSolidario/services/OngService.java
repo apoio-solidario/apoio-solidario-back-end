@@ -4,6 +4,7 @@ import com.github.apoioSolidario.domain.dto.mapper.EntityMapper;
 import com.github.apoioSolidario.domain.dto.request.OngRequest;
 import com.github.apoioSolidario.domain.dto.response.OngResponse;
 import com.github.apoioSolidario.domain.model.Ong;
+import com.github.apoioSolidario.exceptions.EntityNotFoundException;
 import com.github.apoioSolidario.repositories.OngRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,20 +27,19 @@ public class OngService {
     }
 
     public OngResponse findById(Long id) {
-        return EntityMapper.toObject(repository.findById(id),OngResponse.class);
+        var entity = repository.findById(id).orElseThrow(()-> new EntityNotFoundException(String.format("Ong com id %s não encontrada",id)));
+        return EntityMapper.toObject(entity,OngResponse.class);
     }
 
     public OngResponse save( OngRequest ongRequest) {
-        System.out.println("pre mapper");
         System.out.printf(ongRequest.toString());
         Ong entity = EntityMapper.toObject(ongRequest, Ong.class);
-        System.out.println("pos mapper");
         System.out.printf(entity.toString());
         return EntityMapper.toObject(repository.save(entity),OngResponse.class);
     }
 
     public OngResponse update( Long id, @Valid OngRequest ongRequest) {
-        Ong entity = EntityMapper.toObject(findById(id),Ong.class);
+        var entity  = repository.findById(id).orElseThrow(()->new EntityNotFoundException(id,"Ong"));
         EntityMapper.entityModelMapper.map(ongRequest, entity);
         Ong response = repository.save(entity);
         return EntityMapper.toObject(response,OngResponse.class);
