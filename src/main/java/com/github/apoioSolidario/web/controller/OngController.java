@@ -46,5 +46,10 @@ public class OngController {
         URI url = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.getId()).toUri();
         return ResponseEntity.created(url).body(response);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOng(@Valid @PathVariable Long id) {
+        ongService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 
 }
