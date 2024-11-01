@@ -12,7 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-@Tag(name = "ongImages", description = "tem todos os metodos relacionados  a imagens das ongs")
+@Tag(name = "Ong Images", description = "tem todos os metodos relacionados  a imagens das ongs")
 @RestController
 @RequestMapping("/ongImages")
 public class OngImageController {
@@ -45,5 +45,11 @@ public class OngImageController {
         var response = service.save(ongImageRequest);
         URI url = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.getId()).toUri();
         return ResponseEntity.created(url).body(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOng(@Valid @PathVariable Long id) {
+        service.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }
