@@ -13,7 +13,6 @@ public class OngImageRequest {
     private String type;
     @NotBlank
     private String imageUrl;
-    @NotNull
     private Long ong;
 
 }

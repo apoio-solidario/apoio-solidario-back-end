@@ -1,11 +1,17 @@
 package com.github.apoioSolidario.domain.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "ong_socials")
 public class OngSocial implements Serializable {

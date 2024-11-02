@@ -8,11 +8,13 @@ import com.github.apoioSolidario.domain.model.OngImage;
 import com.github.apoioSolidario.exceptions.EntityNotFoundException;
 import com.github.apoioSolidario.repositories.OngImageRepository;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class OngImageService {
     private final OngImageRepository repository;
 
@@ -30,7 +32,11 @@ public class OngImageService {
     }
 
     public OngImageResponse save( OngImageRequest ongImageRequest) {
+        System.out.println(ongImageRequest.toString()+"naservice");
         OngImage entity = EntityMapper.toObject(ongImageRequest, OngImage.class);
+        System.out.println(entity.toString()+"naservice convertido");
+        log.info(entity.toString());
+
         return EntityMapper.toObject(repository.save(entity),OngImageResponse.class);
     }
 
