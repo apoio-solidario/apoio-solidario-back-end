@@ -24,23 +24,23 @@ public class OngImageController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OngImageResponse>> getAllOngs() {
+    public ResponseEntity<List<OngImageResponse>> getAllOngImages() {
         return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OngImageResponse> getOng(@Valid @PathVariable Long id) {
+    public ResponseEntity<OngImageResponse> getOngImage(@Valid @PathVariable Long id) {
         return ResponseEntity.ok().body(service.findById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OngImageResponse> updateOng(@Valid  @PathVariable Long id, @RequestBody @Valid OngImageRequest ongImageRequest) {
+    public ResponseEntity<OngImageResponse> updateOngImage(@Valid  @PathVariable Long id, @RequestBody @Valid OngImageRequest ongImageRequest) {
         var response = service.update(id, ongImageRequest);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<OngImageResponse> saveOng(@Valid  @RequestBody OngImageRequest ongImageRequest) {
+    public ResponseEntity<OngImageResponse> saveOngImage(@Valid  @RequestBody OngImageRequest ongImageRequest) {
         System.out.println(ongImageRequest.toString());
         var response = service.save(ongImageRequest);
         URI url = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.getId()).toUri();
@@ -48,7 +48,7 @@ public class OngImageController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOng(@Valid @PathVariable Long id) {
+    public ResponseEntity<Void> deleteOngImage(@Valid @PathVariable Long id) {
         service.deleteById(id);
         return ResponseEntity.ok().build();
     }

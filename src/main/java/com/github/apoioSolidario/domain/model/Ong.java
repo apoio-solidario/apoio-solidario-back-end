@@ -36,7 +36,7 @@ public class Ong implements Serializable {
     @OneToMany(mappedBy = "ong",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<OngSocial> socials;
     @OneToMany(mappedBy = "ong",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private List<Campaing> Campaings;
+    private List<Campaign> campaigns;
     @OneToMany(mappedBy = "ong",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<Event> events;
 

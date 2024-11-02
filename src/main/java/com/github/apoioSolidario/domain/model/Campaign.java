@@ -1,6 +1,9 @@
 package com.github.apoioSolidario.domain.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -8,10 +11,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "campaings")
-public class Campaing implements Serializable {
+@Table(name = "campaigns")
+public class Campaign implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,7 +40,7 @@ public class Campaing implements Serializable {
     @ManyToOne
     @JoinColumn(name = "ong_id")
     private Ong ong;
-    @OneToMany(mappedBy = "campaing",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "campaign",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<Feedback> feedbacks;
 
     @CreatedDate

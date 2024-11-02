@@ -1,14 +1,10 @@
 package com.github.apoioSolidario.domain.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.github.apoioSolidario.domain.model.Campaing;
+import com.github.apoioSolidario.domain.model.Campaign;
 import com.github.apoioSolidario.domain.model.Event;
 import com.github.apoioSolidario.domain.model.OngImage;
 import com.github.apoioSolidario.domain.model.OngSocial;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +27,7 @@ public class OngResponse {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<OngSocial> socials;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<Campaing> Campaings;
+    private List<Campaign> campaigns;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Event> events;
     private LocalDateTime createdAt;

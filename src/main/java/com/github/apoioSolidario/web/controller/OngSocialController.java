@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/ongSocials")
-@Tag(name = "Ong Social", description = "tem todos os metodos relacionados  a imagens das ongs")
+@Tag(name = "Ong Social", description = "tem todos os metodos relacionados  a redes sociais das ongs")
 
 public class OngSocialController {
 
