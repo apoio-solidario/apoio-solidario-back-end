@@ -44,4 +44,9 @@ public class OngService {
         Ong response = repository.save(entity);
         return EntityMapper.toObject(response,OngResponse.class);
     }
+
+    public void deleteById(@Valid Long id) {
+        var entity = repository.findById(id).orElseThrow(()-> new EntityNotFoundException(id,"Ong"));
+        repository.delete(entity);
+    }
 }

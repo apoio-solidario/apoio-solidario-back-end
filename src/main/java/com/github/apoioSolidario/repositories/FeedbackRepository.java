@@ -1,9 +1,9 @@
 package com.github.apoioSolidario.repositories;
 
-import com.github.apoioSolidario.domain.model.OngImage;
+import com.github.apoioSolidario.domain.model.Feedback;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OngImageRepository extends JpaRepository<OngImage,Long> {
+public interface FeedbackRepository extends JpaRepository<Feedback,Long> {
 }
