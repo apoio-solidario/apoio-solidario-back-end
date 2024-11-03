@@ -14,7 +14,7 @@ public class OngSocialResponse {
     private String platform;
     private String socialUrl;
     private String username;
-    private Ong ong;
+    private OngResponse ong;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

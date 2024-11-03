@@ -26,7 +26,7 @@ public class LocationResponse {
     private String country;
     private BigDecimal latitude ;
     private BigDecimal longitude ;
-    private List<Event> events;
+    private List<EventResponse> events;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

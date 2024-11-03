@@ -9,6 +9,7 @@ import com.github.apoioSolidario.repositories.FeedbackRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -26,9 +27,9 @@ public class FeedbackService {
     }
 
     public FeedbackResponse save( FeedbackRequest request) {
-        System.out.println(request);
         Feedback entity = EntityMapper.toObject(request, Feedback.class);
-        System.out.println(entity);
+        entity.setCreatedAt(LocalDateTime.now());
+        entity.setUpdatedAt(LocalDateTime.now());
         return EntityMapper.toObject(repository.save(entity),FeedbackResponse.class);
     }
 
@@ -36,6 +37,7 @@ public class FeedbackService {
         Feedback entity  = repository.findById(id).orElseThrow(
                 ()->new EntityNotFoundException(id,"feedback")
         );
+        entity.setUpdatedAt(LocalDateTime.now());
         EntityMapper.entityModelMapper.map(request, entity);
         Feedback response = repository.save(entity);
         return EntityMapper.toObject(response,FeedbackResponse.class);

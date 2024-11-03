@@ -9,6 +9,7 @@ import com.github.apoioSolidario.repositories.CampaignRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -26,9 +27,9 @@ public class CampaignService {
     }
 
     public CampaignResponse save( CampaignRequest request) {
-        System.out.println(request);
         Campaign entity = EntityMapper.toObject(request, Campaign.class);
-        System.out.println(entity);
+        entity.setCreatedAt(LocalDateTime.now());
+        entity.setUpdatedAt(LocalDateTime.now());
         return EntityMapper.toObject(repository.save(entity),CampaignResponse.class);
     }
 
@@ -36,6 +37,7 @@ public class CampaignService {
         Campaign entity  = repository.findById(id).orElseThrow(
                 ()->new EntityNotFoundException(id,"campaign")
         );
+        entity.setUpdatedAt(LocalDateTime.now());
         EntityMapper.entityModelMapper.map(request, entity);
         Campaign response = repository.save(entity);
         return EntityMapper.toObject(response,CampaignResponse.class);

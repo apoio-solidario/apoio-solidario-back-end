@@ -9,6 +9,7 @@ import com.github.apoioSolidario.repositories.LocationRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -30,6 +31,8 @@ public class LocationService {
 
     public LocationResponse save( LocationRequest request) {
         Location entity = EntityMapper.toObject(request, Location.class);
+        entity.setCreatedAt(LocalDateTime.now());
+        entity.setUpdatedAt(LocalDateTime.now());
         return EntityMapper.toObject(repository.save(entity),LocationResponse.class);
     }
 
@@ -37,6 +40,7 @@ public class LocationService {
         Location entity  = repository.findById(id).orElseThrow(
                 ()->new EntityNotFoundException(id,"Locations")
         );
+        entity.setUpdatedAt(LocalDateTime.now());
         EntityMapper.entityModelMapper.map(request, entity);
         Location response = repository.save(entity);
         return EntityMapper.toObject(response,LocationResponse.class);

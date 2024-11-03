@@ -23,13 +23,13 @@ public class OngResponse {
     private String email;
     private String phone;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<OngImage> images;
+    private List<OngImageResponse> images;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<OngSocial> socials;
+    private List<OngSocialResponse> socials;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<Campaign> campaigns;
+    private List<CampaignResponse> campaigns;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<Event> events;
+    private List<EventResponse> events;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

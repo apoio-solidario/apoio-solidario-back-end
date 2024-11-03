@@ -15,6 +15,6 @@ public class FeedbackResponse {
     private String email;
     private String content;
     private int rating;
-    private Event event;
-    private Campaign campaign;
+    private EventResponse event;
+    private CampaignResponse campaign;
 }

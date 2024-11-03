@@ -21,8 +21,8 @@ public class CampaignResponse {
     private BigDecimal goalAmount ;
     private BigDecimal amountRaised ;
     private String status;
-    private Ong ong;
-    private List<Feedback> feedbacks;
+    private OngResponse ong;
+    private List<FeedbackResponse> feedbacks;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

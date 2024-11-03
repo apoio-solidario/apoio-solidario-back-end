@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,11 +33,9 @@ public class OngImageService {
     }
 
     public OngImageResponse save( OngImageRequest ongImageRequest) {
-        System.out.println(ongImageRequest.toString()+"naservice");
         OngImage entity = EntityMapper.toObject(ongImageRequest, OngImage.class);
-        System.out.println(entity.toString()+"naservice convertido");
-        log.info(entity.toString());
-
+        entity.setCreatedAt(LocalDateTime.now());
+        entity.setUpdatedAt(LocalDateTime.now());
         return EntityMapper.toObject(repository.save(entity),OngImageResponse.class);
     }
 
@@ -44,6 +43,7 @@ public class OngImageService {
         OngImage entity  = repository.findById(id).orElseThrow(
                 ()->new EntityNotFoundException(id,"Ong")
         );
+        entity.setUpdatedAt(LocalDateTime.now());
         EntityMapper.entityModelMapper.map(ongImageRequest, entity);
         OngImage response = repository.save(entity);
         return EntityMapper.toObject(response,OngImageResponse.class);
