@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -31,9 +32,9 @@ public class EventService {
     }
 
     public EventResponse save( EventRequest request) {
-        System.out.println(request);
         Event entity = EntityMapper.toObject(request, Event.class);
-        System.out.println(entity);
+        entity.setCreatedAt(LocalDateTime.now());
+        entity.setUpdatedAt(LocalDateTime.now());
         return EntityMapper.toObject(repository.save(entity),EventResponse.class);
     }
 
@@ -41,6 +42,7 @@ public class EventService {
         Event entity  = repository.findById(id).orElseThrow(
                 ()->new EntityNotFoundException(id,"event")
         );
+        entity.setUpdatedAt(LocalDateTime.now());
         EntityMapper.entityModelMapper.map(request, entity);
         Event response = repository.save(entity);
         return EntityMapper.toObject(response,EventResponse.class);

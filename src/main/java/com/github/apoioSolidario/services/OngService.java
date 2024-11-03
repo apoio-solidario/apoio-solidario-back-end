@@ -10,7 +10,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -32,14 +34,15 @@ public class OngService {
     }
 
     public OngResponse save( OngRequest ongRequest) {
-        System.out.printf(ongRequest.toString());
         Ong entity = EntityMapper.toObject(ongRequest, Ong.class);
-        System.out.printf(entity.toString());
+        entity.setCreatedAt(LocalDateTime.now());
+        entity.setUpdatedAt(LocalDateTime.now());
         return EntityMapper.toObject(repository.save(entity),OngResponse.class);
     }
 
     public OngResponse update( Long id, @Valid OngRequest ongRequest) {
         var entity  = repository.findById(id).orElseThrow(()->new EntityNotFoundException(id,"Ong"));
+        entity.setUpdatedAt(LocalDateTime.now());
         EntityMapper.entityModelMapper.map(ongRequest, entity);
         Ong response = repository.save(entity);
         return EntityMapper.toObject(response,OngResponse.class);

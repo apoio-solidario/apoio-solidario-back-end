@@ -21,9 +21,9 @@ public class EventResponse {
     private String title;
     private String description;
     private LocalDateTime startData;
-    private Location location;
-    private Ong ong;
-    private List<Feedback> feedbacks;
+    private LocationResponse location;
+    private OngResponse ong;
+    private List<FeedbackResponse> feedbacks;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
