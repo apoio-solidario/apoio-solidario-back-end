@@ -9,6 +9,7 @@ import com.github.apoioSolidario.repositories.OngSocialRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,22 +30,24 @@ public class OngSocialService {
     }
 
     public OngSocialResponse save( OngSocialRequest ongRequest) {
-        System.out.println(ongRequest);
         OngSocial entity = EntityMapper.toObject(ongRequest, OngSocial.class);
-        System.out.println(entity);
-        return EntityMapper.toObject(repository.save(entity),OngSocialResponse.class);
+        entity.setCreatedAt(LocalDateTime.now());
+        entity.setUpdatedAt(LocalDateTime.now());
+        OngSocial response = repository.save(entity);
+        return EntityMapper.toObject(response,OngSocialResponse.class);
     }
 
     public OngSocialResponse update( Long id, @Valid OngSocialRequest ongRequest) {
         var entity  = repository.findById(id).orElseThrow(()->new EntityNotFoundException(id,"OngSocial"));
+        entity.setUpdatedAt(LocalDateTime.now());
         EntityMapper.entityModelMapper.map(ongRequest, entity);
         OngSocial response = repository.save(entity);
         return EntityMapper.toObject(response,OngSocialResponse.class);
     }
 
     public void deleteById(@Valid Long id) {
-        var entity = repository.findById(id).orElseThrow(()-> new EntityNotFoundException(id,"Ong"));
-        repository.delete(entity);
+        var entity = repository.findById(id).orElseThrow(()-> new EntityNotFoundException(id,"OngSocial"));
+        repository.deleteById(entity.getId());
     }
 
 }

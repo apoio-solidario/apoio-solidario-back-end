@@ -16,6 +16,6 @@ public class OngImageRequest {
     @NotBlank(message = "A URL da imagem não pode estar vazia.")
     @Size(max = 255, message = "A URL da imagem deve ter no máximo 255 caracteres.")
     private String imageUrl;
-    private Long ong; // Referência ao ID da ONG, sem validação aqui.
+    private Long ongId; // Referência ao ID da ONG, sem validação aqui.
 
 }
