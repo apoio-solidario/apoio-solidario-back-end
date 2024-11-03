@@ -1,5 +1,7 @@
 package com.github.apoioSolidario.domain.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.github.apoioSolidario.domain.model.Event;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,6 +28,8 @@ public class LocationResponse {
     private String country;
     private BigDecimal latitude ;
     private BigDecimal longitude ;
+    @JsonManagedReference
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<EventResponse> events;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

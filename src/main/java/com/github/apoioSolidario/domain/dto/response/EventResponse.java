@@ -1,5 +1,8 @@
 package com.github.apoioSolidario.domain.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.github.apoioSolidario.domain.model.Feedback;
 import com.github.apoioSolidario.domain.model.Location;
 import com.github.apoioSolidario.domain.model.Ong;
@@ -22,7 +25,10 @@ public class EventResponse {
     private String description;
     private LocalDateTime startData;
     private LocationResponse location;
+    @JsonBackReference
     private OngResponse ong;
+    @JsonManagedReference
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<FeedbackResponse> feedbacks;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

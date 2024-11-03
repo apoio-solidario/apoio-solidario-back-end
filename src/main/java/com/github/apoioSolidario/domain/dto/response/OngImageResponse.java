@@ -12,7 +12,7 @@ public class OngImageResponse {
     private Long id;
     private String type;
     private String imageUrl;
-    private Long ong;
+    private Long ongId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

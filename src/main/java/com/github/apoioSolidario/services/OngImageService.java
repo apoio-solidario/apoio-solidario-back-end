@@ -33,7 +33,9 @@ public class OngImageService {
     }
 
     public OngImageResponse save( OngImageRequest ongImageRequest) {
+        System.out.println(ongImageRequest);
         OngImage entity = EntityMapper.toObject(ongImageRequest, OngImage.class);
+        System.out.println(entity);
         entity.setCreatedAt(LocalDateTime.now());
         entity.setUpdatedAt(LocalDateTime.now());
         return EntityMapper.toObject(repository.save(entity),OngImageResponse.class);

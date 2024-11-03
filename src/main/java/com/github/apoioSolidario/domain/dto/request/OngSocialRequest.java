@@ -26,5 +26,5 @@ public class OngSocialRequest {
     @NotBlank(message = "O nome de usuário não pode estar vazio.")
     @Size(max = 100, message = "O nome de usuário deve ter no máximo 100 caracteres.")
     private String username;
-    private Long ong;
+    private Long ongId;
 }

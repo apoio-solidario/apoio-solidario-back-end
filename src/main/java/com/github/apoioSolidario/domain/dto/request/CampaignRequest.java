@@ -38,6 +38,6 @@ public class CampaignRequest {
     @Size(max = 50, message = "O status deve ter no máximo 50 caracteres.")
     private String status;
     @NotNull(message = "O ID da ONG não pode ser nulo.")
-    private Long ong;
+    private Long ongId;
 
 }

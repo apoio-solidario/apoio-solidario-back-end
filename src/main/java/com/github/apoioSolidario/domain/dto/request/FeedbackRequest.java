@@ -22,7 +22,7 @@ public class FeedbackRequest {
     @Min(value = 1, message = "A avaliação deve ser no mínimo 1.")
     @Max(value = 5, message = "A avaliação deve ser no máximo 5.")
     private int rating;
-    private Long event;
-    private Long campaign;
+    private Long eventId;
+    private Long campaignId;
 
 }

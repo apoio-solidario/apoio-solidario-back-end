@@ -25,7 +25,7 @@ public class EventRequest {
     @NotNull(message = "A data de término não pode ser nula.")
     private LocalDateTime endData;
     @NotNull(message = "O ID da localização não pode ser nulo.")
-    private Long location;
+    private Long locationId;
     @NotNull(message = "O ID da ONG não pode ser nulo.")
-    private Long ong;
+    private Long ongId;
 }

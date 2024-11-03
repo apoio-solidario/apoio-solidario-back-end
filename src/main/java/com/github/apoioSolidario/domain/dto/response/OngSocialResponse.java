@@ -1,5 +1,6 @@
 package com.github.apoioSolidario.domain.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.github.apoioSolidario.domain.model.Ong;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +15,8 @@ public class OngSocialResponse {
     private String platform;
     private String socialUrl;
     private String username;
-    private OngResponse ong;
+    @JsonBackReference
+    private OngResponse ongId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

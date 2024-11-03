@@ -1,5 +1,6 @@
 package com.github.apoioSolidario.domain.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.github.apoioSolidario.domain.model.Campaign;
 import com.github.apoioSolidario.domain.model.Event;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,8 @@ public class FeedbackResponse {
     private String email;
     private String content;
     private int rating;
-    private EventResponse event;
-    private CampaignResponse campaign;
+    @JsonBackReference
+    private EventResponse eventId;
+    @JsonBackReference
+    private CampaignResponse campaignId;
 }
