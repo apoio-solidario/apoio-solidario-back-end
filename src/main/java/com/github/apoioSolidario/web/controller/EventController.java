@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -31,8 +33,8 @@ public class EventController {
             @ApiResponse(responseCode = "200", description = "Todos os eventos recuperados com sucesso")
     })
     @GetMapping
-    public ResponseEntity<List<EventResponse>> getAllEvents() {
-        return ResponseEntity.ok().body(service.findAll());
+    public ResponseEntity<Page<EventResponse>> getAllEvents(Pageable pageable) {
+        return ResponseEntity.ok().body(service.findAll(pageable));
     }
 
     @Operation(summary = "Recuperar um evento específico pelo ID")

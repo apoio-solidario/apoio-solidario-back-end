@@ -8,6 +8,8 @@ import com.github.apoioSolidario.exceptions.EntityNotFoundException;
 import com.github.apoioSolidario.repositories.OngRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,8 +26,8 @@ public class OngService {
         this.repository = repository;
     }
 
-    public List<OngResponse> findAll() {
-        return EntityMapper.toList(repository.findAll(),OngResponse.class);
+    public Page<OngResponse> findAll(Pageable pageable) {
+        return EntityMapper.toPage(repository.findAll(pageable),OngResponse.class);
     }
 
     public OngResponse findById(Long id) {

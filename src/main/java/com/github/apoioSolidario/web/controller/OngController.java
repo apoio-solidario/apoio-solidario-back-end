@@ -14,6 +14,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -32,8 +34,8 @@ public class OngController {
     @Operation(summary = "Recuperar todas as organizações")
     @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso")
     @GetMapping
-    public ResponseEntity<List<OngResponse>> getAllOngs() {
-        return ResponseEntity.ok().body(ongService.findAll());
+    public ResponseEntity<Page<OngResponse>> getAllOngs(Pageable pageable) {
+        return ResponseEntity.ok().body(ongService.findAll(pageable));
     }
 
     @Operation(summary = "Recuperar uma organização pelo ID")

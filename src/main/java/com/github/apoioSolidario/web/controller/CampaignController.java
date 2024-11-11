@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -35,8 +37,8 @@ public class CampaignController {
             @ApiResponse(responseCode = "200", description = "Todas as campanhas recuperadas com sucesso")
     })
     @GetMapping
-    public ResponseEntity<List<CampaignResponse>> getAllCampaigns() {
-        return ResponseEntity.ok().body(service.findAll());
+    public ResponseEntity<Page<CampaignResponse>> getAllCampaigns(Pageable pageable) {
+        return ResponseEntity.ok().body(service.findAll(pageable));
     }
 
     @Operation(summary = "Recuperar uma campanha específica pelo ID")

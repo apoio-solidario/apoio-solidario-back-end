@@ -7,10 +7,11 @@ import com.github.apoioSolidario.domain.model.Location;
 import com.github.apoioSolidario.exceptions.EntityNotFoundException;
 import com.github.apoioSolidario.repositories.LocationRepository;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class LocationService {
@@ -20,8 +21,8 @@ public class LocationService {
         this.repository = repository;
     }
 
-    public List<LocationResponse> findAll() {
-        return EntityMapper.toList(repository.findAll(), LocationResponse.class);
+    public Page<LocationResponse> findAll(Pageable pageable) {
+        return EntityMapper.toPage(repository.findAll(pageable), LocationResponse.class);
     }
 
     public LocationResponse findById(Long id) {

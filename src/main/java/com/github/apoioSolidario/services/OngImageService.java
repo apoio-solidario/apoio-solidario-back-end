@@ -10,6 +10,8 @@ import com.github.apoioSolidario.repositories.OngImageRepository;
 import com.github.apoioSolidario.repositories.OngRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,8 +28,8 @@ public class OngImageService {
         this.ongRepository = ongRepository;
     }
 
-    public List<OngImageResponse> findAll() {
-        return EntityMapper.toList(repository.findAll(),OngImageResponse.class);
+    public Page<OngImageResponse> findAll(Pageable pageable) {
+        return EntityMapper.toPage(repository.findAll(pageable),OngImageResponse.class);
     }
 
     public OngImageResponse findById(Long id) {

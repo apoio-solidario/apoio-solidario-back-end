@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -34,8 +36,8 @@ public class OngSocialController {
             @ApiResponse(responseCode = "200", description = "Todas as redes sociais de ONGs recuperadas com sucesso")
     })
     @GetMapping
-    public ResponseEntity<List<OngSocialResponse>> getAllOngSocials() {
-        return ResponseEntity.ok().body(service.findAll());
+    public ResponseEntity<Page<OngSocialResponse>> getAllOngSocials(Pageable pageable) {
+        return ResponseEntity.ok().body(service.findAll(pageable));
     }
 
     @Operation(summary = "Recuperar uma rede social específica de ONG pelo ID")

@@ -1,20 +1,20 @@
 # API Configuration
-API_CORS=<cors>
-API_NAME=<name>
-API_PORT=<port>
-CONTEXT_PATH=<context_url_base>
+API_CORS=http://localhost:4200
+API_NAME=Apoio-Solidario
+API_PORT=8080
+CONTEXT_PATH=/api/v1
 
 # Database Configuration
-DB_HOST=<host>
-DB_PORT=<port>
-DB_NAME=<name>
-DB_USER=<user>
-DB_PASSWORD=<password>
-DB_TYPE=<type>
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=apio_db
+DB_USER=docker
+DB_PASSWORD=docker
+DB_TYPE=postgresql
 DB_DRIVER=<drive>
 
 # Application Profile
-PROFILE=<profile>
+PROFILE=dev
 
 # Swagger Configuration
-SWAGGER_LINK=<swagger_link>
+SWAGGER_LINK=/swagger-ui/index.html

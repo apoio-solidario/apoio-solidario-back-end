@@ -12,6 +12,8 @@ import com.github.apoioSolidario.repositories.LocationRepository;
 import com.github.apoioSolidario.repositories.OngRepository;
 import jakarta.validation.Valid;
 import org.modelmapper.PropertyMap;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,8 +34,8 @@ public class EventService {
         this.locationRepository = locationRepository;
         this.ongRepository = ongRepository;
     }
-    public List<EventResponse> findAll() {
-        return EntityMapper.toList(repository.findAll(), EventResponse.class);
+    public Page<EventResponse> findAll(Pageable pageable) {
+        return EntityMapper.toPage(repository.findAll(pageable), EventResponse.class);
     }
 
     public EventResponse findById(Long id) {

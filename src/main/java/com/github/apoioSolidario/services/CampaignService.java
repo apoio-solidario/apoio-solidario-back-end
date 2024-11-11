@@ -9,6 +9,8 @@ import com.github.apoioSolidario.exceptions.EntityNotFoundException;
 import com.github.apoioSolidario.repositories.CampaignRepository;
 import com.github.apoioSolidario.repositories.OngRepository;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -72,7 +74,7 @@ public class CampaignService {
         repository.delete(entity);
     }
 
-    public List<CampaignResponse> findAll() {
-        return  EntityMapper.toList(repository.findAll(), CampaignResponse.class);
+    public Page<CampaignResponse> findAll(Pageable pageable) {
+        return  EntityMapper.toPage(repository.findAll(pageable), CampaignResponse.class);
     }
 }

@@ -7,6 +7,8 @@ import com.github.apoioSolidario.domain.model.Feedback;
 import com.github.apoioSolidario.exceptions.EntityNotFoundException;
 import com.github.apoioSolidario.repositories.FeedbackRepository;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -49,7 +51,7 @@ public class FeedbackService {
         repository.delete(entity);
     }
 
-    public List<FeedbackResponse> findAll() {
-       return  EntityMapper.toList(repository.findAll(),FeedbackResponse.class);
+    public Page<FeedbackResponse> findAll(Pageable pageable) {
+       return  EntityMapper.toPage(repository.findAll(pageable),FeedbackResponse.class);
     }
 }
