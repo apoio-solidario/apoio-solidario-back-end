@@ -24,6 +24,7 @@ public class EventResponse {
     private String title;
     private String description;
     private LocalDateTime startData;
+    @JsonBackReference
     private LocationResponse location;
     @JsonBackReference
     private OngResponse ong;

@@ -4,21 +4,26 @@ import com.github.apoioSolidario.domain.dto.mapper.EntityMapper;
 import com.github.apoioSolidario.domain.dto.request.CampaignRequest;
 import com.github.apoioSolidario.domain.dto.response.CampaignResponse;
 import com.github.apoioSolidario.domain.model.Campaign;
+import com.github.apoioSolidario.domain.model.Ong;
 import com.github.apoioSolidario.exceptions.EntityNotFoundException;
 import com.github.apoioSolidario.repositories.CampaignRepository;
+import com.github.apoioSolidario.repositories.OngRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CampaignService {
 
     private final CampaignRepository repository;
+    private final OngRepository ongRepository;
 
-    public CampaignService(CampaignRepository repository) {
+    public CampaignService(CampaignRepository repository, OngRepository ongRepository) {
         this.repository = repository;
+        this.ongRepository = ongRepository;
     }
 
     public CampaignResponse findById(Long id) {
@@ -27,7 +32,16 @@ public class CampaignService {
     }
 
     public CampaignResponse save( CampaignRequest request) {
-        Campaign entity = EntityMapper.toObject(request, Campaign.class);
+        Ong ong = ongRepository.findById(request.getOngId()).orElseThrow(()-> new EntityNotFoundException(request.getOngId(), "Ong"));
+        Campaign entity = new Campaign();
+        entity.setOng(ong);
+        entity.setDescription(request.getDescription());
+        entity.setFeedbacks(new ArrayList<>());
+        entity.setAmountRaised(request.getAmountRaised());
+        entity.setStatus(request.getStatus());
+        entity.setTitle(request.getTitle());
+        entity.setStartData(request.getStartData());
+        entity.setEndData(request.getEndData());
         entity.setCreatedAt(LocalDateTime.now());
         entity.setUpdatedAt(LocalDateTime.now());
         return EntityMapper.toObject(repository.save(entity),CampaignResponse.class);
@@ -37,10 +51,19 @@ public class CampaignService {
         Campaign entity  = repository.findById(id).orElseThrow(
                 ()->new EntityNotFoundException(id,"campaign")
         );
+        Ong ong = ongRepository.findById(request.getOngId()).orElseThrow(()-> new EntityNotFoundException(request.getOngId(), "Ong"));
+        entity.setOng(ong);
+        entity.setDescription(request.getDescription());
+        entity.setGoalAmount(request.getGoalAmount());
+        entity.setFeedbacks(new ArrayList<>());
+        entity.setAmountRaised(request.getAmountRaised());
+        entity.setStatus(request.getStatus());
+        entity.setTitle(request.getTitle());
+        entity.setStartData(request.getStartData());
+        entity.setEndData(request.getEndData());
+        entity.setCreatedAt(LocalDateTime.now());
         entity.setUpdatedAt(LocalDateTime.now());
-        EntityMapper.entityModelMapper.map(request, entity);
-        Campaign response = repository.save(entity);
-        return EntityMapper.toObject(response,CampaignResponse.class);
+        return EntityMapper.toObject(repository.save(entity),CampaignResponse.class);
     }
 
     public void deleteById(@Valid Long id) {

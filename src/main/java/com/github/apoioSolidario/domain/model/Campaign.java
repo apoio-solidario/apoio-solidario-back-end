@@ -37,7 +37,7 @@ public class Campaign implements Serializable {
     @Column(nullable = false,length = 50)
     private String status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ong_id")
     private Ong ong;
     @OneToMany(mappedBy = "campaign",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
