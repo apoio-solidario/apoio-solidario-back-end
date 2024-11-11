@@ -7,6 +7,7 @@ import com.github.apoioSolidario.domain.model.Ong;
 import com.github.apoioSolidario.domain.model.OngImage;
 import com.github.apoioSolidario.exceptions.EntityNotFoundException;
 import com.github.apoioSolidario.repositories.OngImageRepository;
+import com.github.apoioSolidario.repositories.OngRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,11 @@ import java.util.List;
 @Slf4j
 public class OngImageService {
     private final OngImageRepository repository;
+    private final OngRepository ongRepository;
 
-    public OngImageService(OngImageRepository ongImageRepository) {
-        this.repository = ongImageRepository;
+    public OngImageService(OngImageRepository repository, OngRepository ongRepository) {
+        this.repository = repository;
+        this.ongRepository = ongRepository;
     }
 
     public List<OngImageResponse> findAll() {
@@ -45,8 +48,11 @@ public class OngImageService {
         OngImage entity  = repository.findById(id).orElseThrow(
                 ()->new EntityNotFoundException(id,"Ong")
         );
+        var ong = ongRepository.findById(ongImageRequest.getOngId()).orElseThrow(()->new EntityNotFoundException(ongImageRequest.getOngId(),"Ong"));
         entity.setUpdatedAt(LocalDateTime.now());
-        EntityMapper.entityModelMapper.map(ongImageRequest, entity);
+        entity.setOng(ong);
+        entity.setType(ongImageRequest.getType());
+        entity.setImageUrl(ongImageRequest.getImageUrl());
         OngImage response = repository.save(entity);
         return EntityMapper.toObject(response,OngImageResponse.class);
     }

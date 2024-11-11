@@ -10,8 +10,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "ong_socials")
 public class OngSocial implements Serializable {
@@ -24,7 +24,7 @@ public class OngSocial implements Serializable {
     private String socialUrl;
     @Column(nullable = false,length = 100)
     private String username;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ong_id")
     private Ong ong;
     @CreatedDate
