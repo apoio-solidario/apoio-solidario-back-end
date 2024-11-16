@@ -1,40 +1,37 @@
 package com.github.apoioSolidario.domain.dto.mapper;
 
-import com.github.apoioSolidario.domain.dto.request.EventRequest;
-import com.github.apoioSolidario.domain.dto.request.ImageRequest;
-import com.github.apoioSolidario.domain.model.Event;
-import com.github.apoioSolidario.domain.model.Image;
-import com.github.apoioSolidario.domain.model.Ong;
-import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
-public class EntityMapper {
+public abstract class AbstractMapper {
 
 
-    public static ModelMapper entityModelMapper = new ModelMapper();
+    protected final ModelMapper entityModelMapper;
 
-    public static <T,S> T toObject(S source,Class<T> target) {
+    public AbstractMapper(ModelMapper entityModelMapper) {
+        this.entityModelMapper = entityModelMapper;
+    }
+
+    public  <T,S> T toObject(S source, Class<T> target) {
         return entityModelMapper.map(source,target);
     }
 
-    public static <T,S> T objectToObject(S source, T target) {
+    public  <T,S> T objectToObject(S source, T target) {
         entityModelMapper.map(source, target);
         return target;
     }
 
-    public static <T,S> List<T> toList(List<S> source, Class<T> target) {
+    public  <T,S> List<T> toList(List<S> source, Class<T> target) {
         return  source.stream().map((it)->{
             return  entityModelMapper.map(it,target);
         }).toList();
     }
 
-    public static <T,S> Page<T> toPage(Page<S> source, Class<T> target) {
+    public  <T,S> Page<T> toPage(Page<S> source, Class<T> target) {
         List<T> lista =  source.stream().map((it)->{
             return  entityModelMapper.map(it,target);
         }).toList();

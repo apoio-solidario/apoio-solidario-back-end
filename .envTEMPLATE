@@ -1,4 +1,4 @@
-# API Configuration
+.envTEMPLATE# API Configuration
 API_CORS=http://localhost:4200
 API_NAME=Apoio-Solidario
 API_PORT=8080
