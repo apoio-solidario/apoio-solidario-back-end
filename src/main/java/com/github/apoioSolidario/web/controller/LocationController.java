@@ -2,10 +2,12 @@ package com.github.apoioSolidario.web.controller;
 
 import com.github.apoioSolidario.domain.dto.request.LocationRequest;
 import com.github.apoioSolidario.domain.dto.request.OngRequest;
+import com.github.apoioSolidario.domain.dto.response.ImageResponse;
 import com.github.apoioSolidario.domain.dto.response.LocationResponse;
 import com.github.apoioSolidario.domain.dto.response.OngResponse;
 import com.github.apoioSolidario.services.LocationService;
 import com.github.apoioSolidario.web.exception.ErrorMessage;
+import com.github.apoioSolidario.web.utils.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,19 +30,23 @@ import java.util.List;
 public class LocationController {
 
     private final LocationService service;
+    private final ResponseUtils responseUtils;
 
-    public LocationController(LocationService service) {
+    public LocationController(LocationService service, ResponseUtils responseUtils) {
         this.service = service;
+        this.responseUtils = responseUtils;
     }
-
 
     @Operation(summary = "Recuperar todos os locais")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Todos os locais recuperados com sucesso")
     })
     @GetMapping
-    public ResponseEntity<Page<LocationResponse>> getAllLocations(Pageable pageable) {
-        return ResponseEntity.ok().body(service.findAll(pageable));
+    public ResponseEntity<List<LocationResponse>> getAllLocations(Pageable pageable) {
+        Page<LocationResponse> locations = service.findAll(pageable);
+        List<LocationResponse> locationResponses = locations.getContent();
+        HttpHeaders headers = responseUtils.getHeaders(locations);
+       return ResponseEntity.ok().headers(headers).body(locationResponses);
     }
 
     @Operation(summary = "Recuperar um local específico pelo ID")

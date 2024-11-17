@@ -1,9 +1,11 @@
 package com.github.apoioSolidario.web.controller;
 
 import com.github.apoioSolidario.domain.dto.request.OngSocialRequest;
+import com.github.apoioSolidario.domain.dto.response.OngResponse;
 import com.github.apoioSolidario.domain.dto.response.OngSocialResponse;
 import com.github.apoioSolidario.services.OngSocialService;
 import com.github.apoioSolidario.web.exception.ErrorMessage;
+import com.github.apoioSolidario.web.utils.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -26,9 +29,11 @@ import java.util.List;
 public class OngSocialController {
 
     private final OngSocialService service;
+    private final ResponseUtils responseUtils;
 
-    public OngSocialController(OngSocialService service) {
+    public OngSocialController(OngSocialService service, ResponseUtils responseUtils) {
         this.service = service;
+        this.responseUtils = responseUtils;
     }
 
     @Operation(summary = "Recuperar todas as redes sociais de ONGs")
@@ -36,9 +41,11 @@ public class OngSocialController {
             @ApiResponse(responseCode = "200", description = "Todas as redes sociais de ONGs recuperadas com sucesso")
     })
     @GetMapping
-    public ResponseEntity<Page<OngSocialResponse>> getAllOngSocials(Pageable pageable) {
-        return ResponseEntity.ok().body(service.findAll(pageable));
-    }
+    public ResponseEntity<List<OngSocialResponse>> getAllOngSocials(Pageable pageable) {
+        Page<OngSocialResponse> ongSocials = service.findAll(pageable);
+        List<OngSocialResponse> ongSocialResponses = ongSocials.getContent();
+        HttpHeaders headers = responseUtils.getHeaders(ongSocials);
+        return ResponseEntity.ok().headers(headers).body(ongSocialResponses);    }
 
     @Operation(summary = "Recuperar uma rede social específica de ONG pelo ID")
     @ApiResponses(value = {

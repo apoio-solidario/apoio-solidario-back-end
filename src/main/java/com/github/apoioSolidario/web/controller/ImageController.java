@@ -1,9 +1,11 @@
 package com.github.apoioSolidario.web.controller;
 
 import com.github.apoioSolidario.domain.dto.request.ImageRequest;
+import com.github.apoioSolidario.domain.dto.response.FeedbackResponse;
 import com.github.apoioSolidario.domain.dto.response.ImageResponse;
 import com.github.apoioSolidario.services.ImageService;
 import com.github.apoioSolidario.web.exception.ErrorMessage;
+import com.github.apoioSolidario.web.utils.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,20 +15,24 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @Tag(name = "Imagens", description = "Contém todos os métodos relacionados a imagens.")@RestController
 @RequestMapping("/images")
 public class ImageController {
     
     private final ImageService service;
+    private final ResponseUtils responseUtils;
 
-    public ImageController(ImageService service) {
+    public ImageController(ImageService service, ResponseUtils responseUtils) {
         this.service = service;
+        this.responseUtils = responseUtils;
     }
 
     @Operation(summary = "Recuperar todas as imagens")
@@ -34,8 +40,11 @@ public class ImageController {
             @ApiResponse(responseCode = "200", description = "Todas as imagens recuperadas com sucesso")
     })
     @GetMapping
-    public ResponseEntity<Page<ImageResponse>> getAllImages(Pageable pageable) {
-        return ResponseEntity.ok().body(service.findAll(pageable));
+    public ResponseEntity<List<ImageResponse>> getAllImages(Pageable pageable) {
+        Page<ImageResponse> images = service.findAll(pageable);
+        List<ImageResponse> imageResponses = images.getContent();
+        HttpHeaders headers = responseUtils.getHeaders(images);
+        return ResponseEntity.ok().headers(headers).body(imageResponses);
     }
 
     @Operation(summary = "Recuperar uma imagem específica pelo ID")

@@ -4,8 +4,10 @@ import com.github.apoioSolidario.domain.dto.request.CampaignRequest;
 import com.github.apoioSolidario.domain.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.domain.dto.response.CampaignResponse;
 import com.github.apoioSolidario.domain.dto.response.EventResponse;
+import com.github.apoioSolidario.domain.model.Campaign;
 import com.github.apoioSolidario.services.CampaignService;
 import com.github.apoioSolidario.web.exception.ErrorMessage;
+import com.github.apoioSolidario.web.utils.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -28,19 +31,23 @@ import java.util.List;
 public class CampaignController {
 
     private final CampaignService service;
+    private final ResponseUtils responseUtils;
 
-    public CampaignController(CampaignService service) {
+    public CampaignController(CampaignService service, ResponseUtils responseUtils) {
         this.service = service;
+        this.responseUtils = responseUtils;
     }
-
 
     @Operation(summary = "Recuperar todas as campanhas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Todas as campanhas recuperadas com sucesso")
     })
     @GetMapping
-    public ResponseEntity<Page<CampaignResponse>> getAllCampaigns(Pageable pageable) {
-        return ResponseEntity.ok().body(service.findAll(pageable));
+    public ResponseEntity<List<CampaignResponse>> getAllCampaigns(Pageable pageable) {
+        Page<CampaignResponse> campanhas = service.findAll(pageable);
+        List<CampaignResponse> campanhasResponse = campanhas.getContent();
+        HttpHeaders headers = responseUtils.getHeaders(campanhas);
+        return ResponseEntity.ok().headers(headers).body(campanhasResponse);
     }
 
     @Operation(summary = "Recuperar uma campanha específica pelo ID")
