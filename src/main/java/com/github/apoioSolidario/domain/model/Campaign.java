@@ -34,8 +34,13 @@ public class Campaign implements Serializable {
     private BigDecimal goalAmount ;
     @Column( name = "amount_raised", precision = 10,scale = 2)
     private BigDecimal amountRaised ;
+    @Column(nullable = false, name = "image_profile",length = 255)
+    private String imageProfile;
+    @Column(nullable = false, name = "image_banner",length = 255)
+    private String imageBanner;
     @Column(nullable = false,length = 50)
     private String status;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ong_id")

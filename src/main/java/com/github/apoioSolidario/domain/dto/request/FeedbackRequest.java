@@ -1,5 +1,6 @@
 package com.github.apoioSolidario.domain.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +23,9 @@ public class FeedbackRequest {
     @Min(value = 1, message = "A avaliação deve ser no mínimo 1.")
     @Max(value = 5, message = "A avaliação deve ser no máximo 5.")
     private int rating;
+    @JsonProperty("event_id")
     private Long eventId;
+    @JsonProperty("campaign_id")
     private Long campaignId;
 
 }

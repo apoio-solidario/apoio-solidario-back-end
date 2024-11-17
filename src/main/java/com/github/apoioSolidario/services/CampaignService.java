@@ -1,5 +1,6 @@
 package com.github.apoioSolidario.services;
 
+import com.github.apoioSolidario.domain.dto.mapper.CampaignMapper;
 import com.github.apoioSolidario.domain.dto.mapper.EntityMapper;
 import com.github.apoioSolidario.domain.dto.request.CampaignRequest;
 import com.github.apoioSolidario.domain.dto.response.CampaignResponse;
@@ -22,31 +23,26 @@ public class CampaignService {
 
     private final CampaignRepository repository;
     private final OngRepository ongRepository;
+    private final CampaignMapper mapper;
 
-    public CampaignService(CampaignRepository repository, OngRepository ongRepository) {
+    public CampaignService(CampaignRepository repository, OngRepository ongRepository, CampaignMapper mapper) {
         this.repository = repository;
         this.ongRepository = ongRepository;
+        this.mapper = mapper;
     }
 
     public CampaignResponse findById(Long id) {
         var entity = repository.findById(id).orElseThrow(()-> new EntityNotFoundException(id,"campaign"));
-        return EntityMapper.toObject(entity,CampaignResponse.class);
+        return mapper.toObject(entity,CampaignResponse.class);
     }
 
     public CampaignResponse save( CampaignRequest request) {
         Ong ong = ongRepository.findById(request.getOngId()).orElseThrow(()-> new EntityNotFoundException(request.getOngId(), "Ong"));
-        Campaign entity = new Campaign();
+        Campaign entity = mapper.toObject(request,Campaign.class);
         entity.setOng(ong);
-        entity.setDescription(request.getDescription());
-        entity.setFeedbacks(new ArrayList<>());
-        entity.setAmountRaised(request.getAmountRaised());
-        entity.setStatus(request.getStatus());
-        entity.setTitle(request.getTitle());
-        entity.setStartData(request.getStartData());
-        entity.setEndData(request.getEndData());
         entity.setCreatedAt(LocalDateTime.now());
         entity.setUpdatedAt(LocalDateTime.now());
-        return EntityMapper.toObject(repository.save(entity),CampaignResponse.class);
+        return mapper.toObject(repository.save(entity),CampaignResponse.class);
     }
 
     public CampaignResponse update( Long id, @Valid CampaignRequest request) {
@@ -57,7 +53,6 @@ public class CampaignService {
         entity.setOng(ong);
         entity.setDescription(request.getDescription());
         entity.setGoalAmount(request.getGoalAmount());
-        entity.setFeedbacks(new ArrayList<>());
         entity.setAmountRaised(request.getAmountRaised());
         entity.setStatus(request.getStatus());
         entity.setTitle(request.getTitle());
@@ -65,7 +60,7 @@ public class CampaignService {
         entity.setEndData(request.getEndData());
         entity.setCreatedAt(LocalDateTime.now());
         entity.setUpdatedAt(LocalDateTime.now());
-        return EntityMapper.toObject(repository.save(entity),CampaignResponse.class);
+        return mapper.toObject(repository.save(entity),CampaignResponse.class);
     }
 
     public void deleteById(@Valid Long id) {
@@ -75,6 +70,6 @@ public class CampaignService {
     }
 
     public Page<CampaignResponse> findAll(Pageable pageable) {
-        return  EntityMapper.toPage(repository.findAll(pageable), CampaignResponse.class);
+        return  mapper.toPage(repository.findAll(pageable), CampaignResponse.class);
     }
 }

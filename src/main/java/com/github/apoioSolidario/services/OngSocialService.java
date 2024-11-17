@@ -1,6 +1,6 @@
 package com.github.apoioSolidario.services;
 
-import com.github.apoioSolidario.domain.dto.mapper.EntityMapper;
+import com.github.apoioSolidario.domain.dto.mapper.OngSocialMapper;
 import com.github.apoioSolidario.domain.dto.request.OngSocialRequest;
 import com.github.apoioSolidario.domain.dto.response.OngSocialResponse;
 import com.github.apoioSolidario.domain.model.Ong;
@@ -14,33 +14,36 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class OngSocialService {
     private final OngSocialRepository repository;
     private final OngRepository ongRepository;
+    private final OngSocialMapper mapper;
 
-    public OngSocialService(OngSocialRepository repository, OngRepository ongRepository) {
+    public OngSocialService(OngSocialRepository repository, OngRepository ongRepository, OngSocialMapper mapper) {
         this.repository = repository;
         this.ongRepository = ongRepository;
+        this.mapper = mapper;
     }
 
     public Page<OngSocialResponse> findAll(Pageable pageable) {
-        return EntityMapper.toPage(repository.findAll(pageable),OngSocialResponse.class);
+        return mapper.toPage(repository.findAll(pageable),OngSocialResponse.class);
     }
 
     public OngSocialResponse findById(Long id) {
         var entity = repository.findById(id).orElseThrow(()-> new EntityNotFoundException(id,"OngSocial"));
-        return EntityMapper.toObject(entity,OngSocialResponse.class);
+        return mapper.toObject(entity,OngSocialResponse.class);
     }
 
     public OngSocialResponse save( OngSocialRequest ongRequest) {
-        OngSocial entity = EntityMapper.toObject(ongRequest, OngSocial.class);
+        OngSocial entity = mapper.toObject(ongRequest, OngSocial.class);
+        Ong ong = ongRepository.findById(ongRequest.getOngId()).orElseThrow(()->new EntityNotFoundException(ongRequest.getOngId(), "Ong"));
         entity.setCreatedAt(LocalDateTime.now());
         entity.setUpdatedAt(LocalDateTime.now());
+        entity.setOng(ong);
         OngSocial response = repository.save(entity);
-        return EntityMapper.toObject(response,OngSocialResponse.class);
+        return mapper.toObject(response,OngSocialResponse.class);
     }
 
     public OngSocialResponse update( Long id, @Valid OngSocialRequest ongSocialRequest) {
@@ -51,7 +54,7 @@ public class OngSocialService {
         entity.setSocialUrl(ongSocialRequest.getSocialUrl());
         entity.setPlatform(ongSocialRequest.getPlatform());
         entity.setUsername(ongSocialRequest.getUsername());
-        return EntityMapper.toObject(repository.save(entity),OngSocialResponse.class);
+        return mapper.toObject(repository.save(entity),OngSocialResponse.class);
     }
 
     public void deleteById(@Valid Long id) {
