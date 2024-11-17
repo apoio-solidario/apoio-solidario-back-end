@@ -3,6 +3,7 @@ package com.github.apoioSolidario.services;
 import com.github.apoioSolidario.domain.dto.mapper.CampaignMapper;
 import com.github.apoioSolidario.domain.dto.mapper.EntityMapper;
 import com.github.apoioSolidario.domain.dto.request.CampaignRequest;
+import com.github.apoioSolidario.domain.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.domain.dto.response.CampaignResponse;
 import com.github.apoioSolidario.domain.model.Campaign;
 import com.github.apoioSolidario.domain.model.Ong;
@@ -62,6 +63,14 @@ public class CampaignService {
         entity.setUpdatedAt(LocalDateTime.now());
         return mapper.toObject(repository.save(entity),CampaignResponse.class);
     }
+    public CampaignResponse updateStatus(@Valid Long id, @Valid UpdateStatusRequest request) {
+        Campaign entity  = repository.findById(id).orElseThrow(
+                ()->new EntityNotFoundException(id,"campaign")
+        );
+        entity.setStatus(request.getStatus());
+        entity.setUpdatedAt(LocalDateTime.now());
+        return mapper.toObject(repository.save(entity),CampaignResponse.class);
+    }
 
     public void deleteById(@Valid Long id) {
         var entity = repository.findById(id).orElseThrow(()->new EntityNotFoundException(id,"campaign")
@@ -72,4 +81,6 @@ public class CampaignService {
     public Page<CampaignResponse> findAll(Pageable pageable) {
         return  mapper.toPage(repository.findAll(pageable), CampaignResponse.class);
     }
+
+
 }

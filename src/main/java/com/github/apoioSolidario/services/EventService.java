@@ -2,6 +2,7 @@ package com.github.apoioSolidario.services;
 
 import com.github.apoioSolidario.domain.dto.mapper.EventMapper;
 import com.github.apoioSolidario.domain.dto.request.EventRequest;
+import com.github.apoioSolidario.domain.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.domain.dto.response.EventResponse;
 import com.github.apoioSolidario.domain.model.Event;
 import com.github.apoioSolidario.domain.model.Location;
@@ -74,4 +75,12 @@ public class EventService {
         repository.delete(entity);
     }
 
+    public EventResponse updateStatus(@Valid Long id, @Valid UpdateStatusRequest request) {
+        Event entity = repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(id, "event")
+        );
+        entity.setStatus(request.getStatus());
+        entity.setUpdatedAt(LocalDateTime.now());
+        return mapper.toObject(repository.save(entity), EventResponse.class);
+    }
 }

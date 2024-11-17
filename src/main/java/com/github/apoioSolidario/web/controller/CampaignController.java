@@ -1,7 +1,9 @@
 package com.github.apoioSolidario.web.controller;
 
 import com.github.apoioSolidario.domain.dto.request.CampaignRequest;
+import com.github.apoioSolidario.domain.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.domain.dto.response.CampaignResponse;
+import com.github.apoioSolidario.domain.dto.response.EventResponse;
 import com.github.apoioSolidario.services.CampaignService;
 import com.github.apoioSolidario.web.exception.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,6 +52,21 @@ public class CampaignController {
     @GetMapping("/{id}")
     public ResponseEntity<CampaignResponse> getCampaign(@Valid @PathVariable Long id) {
         return ResponseEntity.ok().body(service.findById(id));
+    }
+
+    @Operation(summary = "Atualizar de status de um campanha específico pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Status do campanha atualizado com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Entidade não processável",
+                    content = @Content(schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "404", description = "Campanha não encontrado",
+                    content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
+    })
+    @PutMapping("status/{id}")
+    public ResponseEntity<CampaignResponse> updateStatusCampaign(@Valid @PathVariable Long id,
+                                                           @RequestBody @Valid UpdateStatusRequest request) {
+        var response = service.updateStatus(id, request);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Atualizar uma campanha específica pelo ID")
