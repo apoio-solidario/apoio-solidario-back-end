@@ -28,15 +28,12 @@ public class Feedback implements Serializable {
     private String content;
     @Column(nullable = false)
     private int rating;
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Event event;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "campaign_id")
     private Campaign campaign;
-
     @CreatedDate
     @Column(name = "Submitted_at")
     private LocalDateTime createdAt;

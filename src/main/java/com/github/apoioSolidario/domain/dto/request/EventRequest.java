@@ -1,5 +1,6 @@
 package com.github.apoioSolidario.domain.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.apoioSolidario.domain.model.Location;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +25,15 @@ public class EventRequest {
     private LocalDateTime startData;
     @NotNull(message = "A data de término não pode ser nula.")
     private LocalDateTime endData;
+    @NotBlank(message = "A imagem de perfil não pode estar vazia.")
+    @JsonProperty("image_profile")
+    private String imageProfile;
+    @NotBlank(message = "A imagem do banner não pode estar vazia.")
+    @JsonProperty("image_banner")
+    private String imageBanner;
+    @NotBlank(message = "O status não pode estar vazio.")
+    @Size(max = 50, message = "O status deve ter no máximo 50 caracteres.")
+    private String status;
     @NotNull(message = "O ID da localização não pode ser nulo.")
     private Long locationId;
     @NotNull(message = "O ID da ONG não pode ser nulo.")

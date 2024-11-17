@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -31,9 +30,17 @@ public class Ong implements Serializable {
     private String email;
     @Column(nullable = false)
     private String phone;
+    @Column(nullable = false, name = "image_profile",length = 255)
+    private String imageProfile;
+    @Column(nullable = false, name = "image_banner",length = 255)
+    private String imageBanner;
+    @Column(nullable = false,length = 50)
+    private String status;
+    @Column(nullable = false, name = "category",length = 100)
+    private String category;
 
     @OneToMany(mappedBy = "ong",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private List<OngImage> images;
+    private List<Image> images;
     @OneToMany(mappedBy = "ong",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<OngSocial> socials;
     @OneToMany(mappedBy = "ong",fetch = FetchType.EAGER,cascade = CascadeType.ALL)

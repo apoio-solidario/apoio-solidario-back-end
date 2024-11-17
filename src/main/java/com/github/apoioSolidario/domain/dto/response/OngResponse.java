@@ -2,10 +2,8 @@ package com.github.apoioSolidario.domain.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.github.apoioSolidario.domain.model.Campaign;
-import com.github.apoioSolidario.domain.model.Event;
-import com.github.apoioSolidario.domain.model.OngImage;
-import com.github.apoioSolidario.domain.model.OngSocial;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,12 +18,19 @@ public class OngResponse {
     private Long id;
     private String name;
     private String description;
+    @JsonProperty("website_url")
     private String websiteUrl;
     private String email;
     private String phone;
+    @JsonProperty("image_profile")
+    private String imageProfile;
+    @JsonProperty("image_banner")
+    private String imageBanner;
+    private String status;
+    private String category;
     @JsonManagedReference
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<OngImageResponse> images;
+    private List<ImageResponse> images;
     @JsonManagedReference
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<OngSocialResponse> socials;
@@ -35,6 +40,8 @@ public class OngResponse {
     @JsonManagedReference
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<EventResponse> events;
+    @JsonProperty("created_at")
     private LocalDateTime createdAt;
+    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 }

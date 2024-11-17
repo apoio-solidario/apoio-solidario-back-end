@@ -30,7 +30,12 @@ public class Event implements Serializable {
     @LastModifiedDate
     @Column(nullable = false, name = "end_data")
     private LocalDateTime endData;
-
+    @Column(nullable = false, name = "image_profile",length = 255)
+    private String imageProfile;
+    @Column(nullable = false, name = "image_banner",length = 255)
+    private String imageBanner;
+    @Column(nullable = false,length = 50)
+    private String status;
     @ManyToOne
     @JoinColumn(name = "location_id")
     private Location location;
@@ -39,7 +44,6 @@ public class Event implements Serializable {
     private Ong ong;
     @OneToMany(mappedBy = "event",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<Feedback> feedbacks;
-
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
