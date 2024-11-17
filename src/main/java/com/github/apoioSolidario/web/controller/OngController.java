@@ -2,10 +2,12 @@ package com.github.apoioSolidario.web.controller;
 
 import com.github.apoioSolidario.domain.dto.request.OngRequest;
 import com.github.apoioSolidario.domain.dto.request.UpdateStatusRequest;
+import com.github.apoioSolidario.domain.dto.response.LocationResponse;
 import com.github.apoioSolidario.domain.dto.response.OngResponse;
 import com.github.apoioSolidario.domain.model.Ong;
 import com.github.apoioSolidario.services.OngService;
 import com.github.apoioSolidario.web.exception.ErrorMessage;
+import com.github.apoioSolidario.web.utils.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,6 +19,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,16 +30,21 @@ import java.util.List;
 @RequestMapping("/ongs")
 public class OngController {
     private final OngService ongService;
+    private final ResponseUtils responseUtils;
 
-    public OngController(OngService ongService) {
+    public OngController(OngService ongService, ResponseUtils responseUtils) {
         this.ongService = ongService;
+        this.responseUtils = responseUtils;
     }
 
     @Operation(summary = "Recuperar todas as organizações")
     @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso")
     @GetMapping
-    public ResponseEntity<Page<OngResponse>> getAllOngs(Pageable pageable) {
-        return ResponseEntity.ok().body(ongService.findAll(pageable));
+    public ResponseEntity<List<OngResponse>> getAllOngs(Pageable pageable) {
+        Page<OngResponse> ongs = ongService.findAll(pageable);
+        List<OngResponse> ongResponses = ongs.getContent();
+        HttpHeaders headers = responseUtils.getHeaders(ongs);
+        return ResponseEntity.ok().headers(headers).body(ongResponses);
     }
 
     @Operation(summary = "Recuperar uma organização pelo ID")

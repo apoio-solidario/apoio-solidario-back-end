@@ -1,9 +1,11 @@
 package com.github.apoioSolidario.web.controller;
 
 import com.github.apoioSolidario.domain.dto.request.FeedbackRequest;
+import com.github.apoioSolidario.domain.dto.response.EventResponse;
 import com.github.apoioSolidario.domain.dto.response.FeedbackResponse;
 import com.github.apoioSolidario.services.FeedbackService;
 import com.github.apoioSolidario.web.exception.ErrorMessage;
+import com.github.apoioSolidario.web.utils.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -24,9 +27,11 @@ import java.util.List;
 @RequestMapping("/feedbacks")
 public class FeedbackController {
     private final FeedbackService service;
+    private final ResponseUtils responseUtils;
 
-    public FeedbackController(FeedbackService service) {
+    public FeedbackController(FeedbackService service, ResponseUtils responseUtils) {
         this.service = service;
+        this.responseUtils = responseUtils;
     }
 
     @Operation(summary = "Recuperar todos os feedbacks")
@@ -34,8 +39,11 @@ public class FeedbackController {
             @ApiResponse(responseCode = "200", description = "Todos os feedbacks recuperados com sucesso")
     })
     @GetMapping
-    public ResponseEntity<Page<FeedbackResponse>> getAllFeedbacks(Pageable pageable) {
-        return ResponseEntity.ok().body(service.findAll(pageable));
+    public ResponseEntity<List<FeedbackResponse>> getAllFeedbacks(Pageable pageable) {
+        Page<FeedbackResponse> feedbacks = service.findAll(pageable);
+        List<FeedbackResponse> feedbackResponses = feedbacks.getContent();
+        HttpHeaders headers = responseUtils.getHeaders(feedbacks);
+        return ResponseEntity.ok().headers(headers).body(feedbackResponses);
     }
 
     @Operation(summary = "Recuperar um feedback específico pelo ID")

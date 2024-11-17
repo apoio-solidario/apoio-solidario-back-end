@@ -2,9 +2,11 @@ package com.github.apoioSolidario.web.controller;
 
 import com.github.apoioSolidario.domain.dto.request.EventRequest;
 import com.github.apoioSolidario.domain.dto.request.UpdateStatusRequest;
+import com.github.apoioSolidario.domain.dto.response.CampaignResponse;
 import com.github.apoioSolidario.domain.dto.response.EventResponse;
 import com.github.apoioSolidario.services.EventService;
 import com.github.apoioSolidario.web.exception.ErrorMessage;
+import com.github.apoioSolidario.web.utils.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -24,9 +27,11 @@ import java.util.List;
 @RequestMapping("/events")
 public class EventController {
     private final EventService service;
+    private final ResponseUtils responseUtils;
 
-    public EventController(EventService eventService) {
-        this.service = eventService;
+    public EventController(EventService service, ResponseUtils responseUtils) {
+        this.service = service;
+        this.responseUtils = responseUtils;
     }
 
     @Operation(summary = "Recuperar todos os eventos")
@@ -34,8 +39,11 @@ public class EventController {
             @ApiResponse(responseCode = "200", description = "Todos os eventos recuperados com sucesso")
     })
     @GetMapping
-    public ResponseEntity<Page<EventResponse>> getAllEvents(Pageable pageable) {
-        return ResponseEntity.ok().body(service.findAll(pageable));
+    public ResponseEntity<List<EventResponse>> getAllEvents(Pageable pageable) {
+        Page<EventResponse> events = service.findAll(pageable);
+        List<EventResponse> eventResponses = events.getContent();
+        HttpHeaders headers = responseUtils.getHeaders(events);
+        return ResponseEntity.ok().headers(headers).body(eventResponses);
     }
 
     @Operation(summary = "Recuperar um evento específico pelo ID")
