@@ -2,6 +2,7 @@ package com.github.apoioSolidario.services;
 
 import com.github.apoioSolidario.domain.dto.mapper.GenericMapper;
 import com.github.apoioSolidario.domain.dto.request.OngRequest;
+import com.github.apoioSolidario.domain.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.domain.dto.response.OngResponse;
 import com.github.apoioSolidario.domain.model.Ong;
 import com.github.apoioSolidario.exceptions.EntityNotFoundException;
@@ -47,9 +48,17 @@ public class OngService {
         Ong response = repository.save(entity);
         return mapper.toObject(response,OngResponse.class);
     }
+    public OngResponse updateStatus(@Valid Long id, @Valid UpdateStatusRequest ongRequest) {
+        var entity  = repository.findById(id).orElseThrow(()->new EntityNotFoundException(id,"Ong"));
+        entity.setUpdatedAt(LocalDateTime.now());
+        entity.setStatus(ongRequest.getStatus());
+        return  mapper.toObject(repository.save(entity),OngResponse.class);
+    }
 
     public void deleteById(@Valid Long id) {
         var entity = repository.findById(id).orElseThrow(()-> new EntityNotFoundException(id,"Ong"));
         repository.delete(entity);
     }
+
+
 }

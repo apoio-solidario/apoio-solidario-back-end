@@ -1,6 +1,7 @@
 package com.github.apoioSolidario.web.controller;
 
 import com.github.apoioSolidario.domain.dto.request.EventRequest;
+import com.github.apoioSolidario.domain.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.domain.dto.response.EventResponse;
 import com.github.apoioSolidario.services.EventService;
 import com.github.apoioSolidario.web.exception.ErrorMessage;
@@ -62,6 +63,19 @@ public class EventController {
         var response = service.update(id, request);
         return ResponseEntity.ok(response);
     }
+    @Operation(summary = "Atualizar de status de um evento específico pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Status do evento atualizado com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Entidade não processável",
+                    content = @Content(schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "404", description = "Evento não encontrado",
+                    content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
+    })
+    @PutMapping("status/{id}")
+    public ResponseEntity<EventResponse> updateStatusEvent(@Valid @PathVariable Long id,
+                                                     @RequestBody @Valid UpdateStatusRequest request) {
+        return ResponseEntity.ok(service.updateStatus(id, request));
+    }
 
     @Operation(summary = "Criar um novo evento")
     @ApiResponses(value = {
@@ -87,4 +101,5 @@ public class EventController {
         service.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
 }

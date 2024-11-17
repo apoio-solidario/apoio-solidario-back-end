@@ -1,6 +1,7 @@
 package com.github.apoioSolidario.web.controller;
 
 import com.github.apoioSolidario.domain.dto.request.OngRequest;
+import com.github.apoioSolidario.domain.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.domain.dto.response.OngResponse;
 import com.github.apoioSolidario.domain.model.Ong;
 import com.github.apoioSolidario.services.OngService;
@@ -57,12 +58,19 @@ public class OngController {
             @ApiResponse(responseCode = "404", description = "Entidade não encontrada",
                     content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
+    @PutMapping("status/{id}")
+    public ResponseEntity<OngResponse> updateOngStatus(@Valid @PathVariable Long id,
+                                                 @RequestBody @Valid UpdateStatusRequest ongRequest) {
+        return ResponseEntity.ok(ongService.updateStatus(id, ongRequest));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<OngResponse> updateOng(@Valid @PathVariable Long id,
                                                  @RequestBody @Valid OngRequest ongRequest) {
         var response = ongService.update(id, ongRequest);
         return ResponseEntity.ok(response);
     }
+
 
     @Operation(summary = "Criar uma nova organização")
     @ApiResponses(value = {
