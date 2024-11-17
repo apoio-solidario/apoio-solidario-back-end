@@ -16,7 +16,7 @@ spring:
   # Configura��es de JPA/Hibernate
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
 
   # Configura��es de perfil ativo

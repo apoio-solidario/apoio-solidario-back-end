@@ -1,8 +1,10 @@
 package com.github.apoioSolidario.web.exception;
 
 import com.github.apoioSolidario.exceptions.EntityNotFoundException;
+import com.github.apoioSolidario.exceptions.UniqueDataException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,12 @@ public class ApiExceptionHandler{
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY,"Dados invalidos", ex.getBindingResult()));
+    }
+    @ExceptionHandler(UniqueDataException.class)
+    public ResponseEntity<ErrorMessage> uniqueDataException(UniqueDataException ex,HttpServletRequest request){
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request,HttpStatus.CONFLICT,ex.getMessage()));
     }
 
 

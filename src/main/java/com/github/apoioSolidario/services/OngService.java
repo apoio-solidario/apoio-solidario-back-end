@@ -6,8 +6,10 @@ import com.github.apoioSolidario.domain.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.domain.dto.response.OngResponse;
 import com.github.apoioSolidario.domain.model.Ong;
 import com.github.apoioSolidario.exceptions.EntityNotFoundException;
+import com.github.apoioSolidario.exceptions.UniqueDataException;
 import com.github.apoioSolidario.repositories.OngRepository;
 import jakarta.validation.Valid;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,37 +28,46 @@ public class OngService {
     }
 
     public Page<OngResponse> findAll(Pageable pageable) {
-        return mapper.toPage(repository.findAll(pageable),OngResponse.class);
+        return mapper.toPage(repository.findAll(pageable), OngResponse.class);
     }
 
     public OngResponse findById(Long id) {
-        var entity = repository.findById(id).orElseThrow(()-> new EntityNotFoundException(String.format("Ong com id %s não encontrada",id)));
-        return mapper.toObject(entity,OngResponse.class);
+        var entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Ong com id %s não encontrada", id)));
+        return mapper.toObject(entity, OngResponse.class);
     }
 
-    public OngResponse save( OngRequest ongRequest) {
-        Ong entity = mapper.toObject(ongRequest, Ong.class);
-        entity.setCreatedAt(LocalDateTime.now());
-        entity.setUpdatedAt(LocalDateTime.now());
-        return mapper.toObject(repository.save(entity),OngResponse.class);
+    public OngResponse save(OngRequest ongRequest) {
+        try {
+            Ong entity = mapper.toObject(ongRequest, Ong.class);
+            entity.setCreatedAt(LocalDateTime.now());
+            entity.setUpdatedAt(LocalDateTime.now());
+            return mapper.toObject(repository.save(entity), OngResponse.class);
+        } catch (DataIntegrityViolationException ex) {
+            throw new UniqueDataException("O nome da ong devem ser unicos");
+        }
     }
 
-    public OngResponse update( Long id, @Valid OngRequest ongRequest) {
-        var entity  = repository.findById(id).orElseThrow(()->new EntityNotFoundException(id,"Ong"));
-        entity.setUpdatedAt(LocalDateTime.now());
-        mapper.objectToObject(ongRequest, entity);
-        Ong response = repository.save(entity);
-        return mapper.toObject(response,OngResponse.class);
+    public OngResponse update(Long id, @Valid OngRequest ongRequest) {
+        try {
+            var entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, "Ong"));
+            entity.setUpdatedAt(LocalDateTime.now());
+            mapper.objectToObject(ongRequest, entity);
+            Ong response = repository.save(entity);
+            return mapper.toObject(response, OngResponse.class);
+        } catch (DataIntegrityViolationException ex) {
+            throw new UniqueDataException("O nome da ong devem ser unicos");
+        }
     }
+
     public OngResponse updateStatus(@Valid Long id, @Valid UpdateStatusRequest ongRequest) {
-        var entity  = repository.findById(id).orElseThrow(()->new EntityNotFoundException(id,"Ong"));
+        var entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, "Ong"));
         entity.setUpdatedAt(LocalDateTime.now());
         entity.setStatus(ongRequest.getStatus());
-        return  mapper.toObject(repository.save(entity),OngResponse.class);
+        return mapper.toObject(repository.save(entity), OngResponse.class);
     }
 
     public void deleteById(@Valid Long id) {
-        var entity = repository.findById(id).orElseThrow(()-> new EntityNotFoundException(id,"Ong"));
+        var entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, "Ong"));
         repository.delete(entity);
     }
 
