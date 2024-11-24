@@ -1,3 +1,8 @@
+# Configuração do spring security
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET}
 server:
   port: ${API_PORT}
   servlet:
@@ -26,5 +31,5 @@ spring:
 # Configura��es do swagger
 springdoc:
   swagger-ui:
-    path=/swagger-ui:
-      html: ${SWAGGER_LINK}
+      path: ${SWAGGER_LINK}
+
