@@ -46,6 +46,17 @@ public class OngController {
         return ResponseEntity.ok().headers(headers).body(ongResponses);
     }
 
+    @Operation(summary = "Recuperar uma organização pelo ID do usuario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Entidade não encontrada",
+                    content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
+    })
+    @GetMapping("/user/{id}")
+    public ResponseEntity<OngResponse> getOngByUserId(@Valid @PathVariable UUID id) {
+        return ResponseEntity.ok().body(ongService.findByUserId(id));
+    }
+
     @Operation(summary = "Recuperar uma organização pelo ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso"),

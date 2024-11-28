@@ -8,6 +8,7 @@ import com.github.apoioSolidario.model.Ong;
 import com.github.apoioSolidario.exception.EntityNotFoundException;
 import com.github.apoioSolidario.exception.UniqueDataException;
 import com.github.apoioSolidario.repository.OngRepository;
+import com.github.apoioSolidario.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -21,11 +22,13 @@ import java.util.UUID;
 public class OngService {
 
     private final OngRepository repository;
+    private final UserRepository userRepository;
     private final GenericMapper mapper;
 
-    public OngService(OngRepository repository, GenericMapper mapper) {
+    public OngService(OngRepository repository, GenericMapper mapper,UserRepository userRepository) {
         this.repository = repository;
         this.mapper = mapper;
+        this.userRepository = userRepository;
     }
 
     public Page<OngResponse> findAll(Pageable pageable) {
@@ -37,8 +40,14 @@ public class OngService {
         return mapper.toObject(entity, OngResponse.class);
     }
 
+    public OngResponse findByUserId(UUID id) {
+        var entity = repository.findByUser_UserId(id).orElseThrow(() -> new EntityNotFoundException(String.format("Ong com user_id %s não encontrada", id)));
+        return mapper.toObject(entity, OngResponse.class);
+    }
+
     public OngResponse save(OngRequest ongRequest) {
         try {
+            this.userRepository.findById(ongRequest.getUserId()).orElseThrow(()->new EntityNotFoundException(ongRequest.getUserId(),"user"));
             Ong entity = mapper.toObject(ongRequest, Ong.class);
             entity.setCreatedAt(LocalDateTime.now());
             entity.setUpdatedAt(LocalDateTime.now());
@@ -51,6 +60,7 @@ public class OngService {
     public OngResponse update(UUID id, @Valid OngRequest ongRequest) {
         try {
             var entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, "Ong"));
+            this.userRepository.findById(ongRequest.getUserId()).orElseThrow(()->new EntityNotFoundException(ongRequest.getUserId(),"user"));
             entity.setUpdatedAt(LocalDateTime.now());
             mapper.objectToObject(ongRequest, entity);
             Ong response = repository.save(entity);

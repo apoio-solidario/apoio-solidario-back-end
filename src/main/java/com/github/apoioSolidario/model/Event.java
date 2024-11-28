@@ -43,8 +43,6 @@ public class Event implements Serializable {
     @ManyToOne
     @JoinColumn(name = "ong_id")
     private Ong ong;
-    @OneToMany(mappedBy = "event",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private List<Feedback> feedbacks;
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;

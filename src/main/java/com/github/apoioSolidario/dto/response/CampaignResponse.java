@@ -35,9 +35,6 @@ public class CampaignResponse {
     private String status;
     @JsonProperty("ong_id")
     private UUID ongId;
-    @JsonManagedReference
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<FeedbackResponse> feedbacks;
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
     @JsonProperty("updated_at")

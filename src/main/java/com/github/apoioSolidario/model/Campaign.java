@@ -8,7 +8,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -47,8 +46,6 @@ public class Campaign implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ong_id")
     private Ong ong;
-    @OneToMany(mappedBy = "campaign",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private List<Feedback> feedbacks;
 
     @CreatedDate
     @Column(name = "created_at")

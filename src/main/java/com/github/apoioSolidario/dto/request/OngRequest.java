@@ -3,8 +3,11 @@ package com.github.apoioSolidario.dto.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -36,7 +39,9 @@ public class OngRequest {
     @Email(message = "O e-mail deve ser válido.")
     @Size(max = 100, message = "O e-mail deve ter no máximo 100 caracteres.")
     private String email;
-
+    @NotNull(message = "O ID do usuario não pode ser nulo.")
+    @JsonProperty("user_id")
+    private UUID userId;
     @NotBlank(message = "O telefone não pode estar vazio.")
     private String phone;
 }

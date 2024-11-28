@@ -29,18 +29,8 @@ public class OngResponse {
     private String imageBanner;
     private String status;
     private String category;
-    @JsonManagedReference
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<ImageResponse> images;
-    @JsonManagedReference
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<OngSocialResponse> socials;
-    @JsonManagedReference
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<CampaignResponse> campaigns;
-    @JsonManagedReference
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<EventResponse> events;
+    @JsonProperty("user_id")
+    private UUID userId;
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
     @JsonProperty("updated_at")

@@ -7,6 +7,10 @@ import com.github.apoioSolidario.dto.response.UserResponse;
 import com.github.apoioSolidario.model.User;
 import com.github.apoioSolidario.service.AuthService;
 import com.github.apoioSolidario.service.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
+@Tag(name = "Autenticação", description = "Contem os metodos necessarios para realizar autenticação de usário")
 @RestController
 @RequestMapping("auth")
 public class AuthController {
@@ -35,7 +40,10 @@ public class AuthController {
         this.tokenService = tokenService;
     }
 
-
+    @Operation(summary = "Realizar login no sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login realizado com sucesso")
+    })
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthRequest authRequest) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword());
@@ -44,6 +52,10 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(token));
     }
 
+    @Operation(summary = "Registrar um novo usuário no sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário registrado com sucesso")
+    })
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@RequestBody @Valid UserRequest userRequestDTO) {
         UserResponse responseDTO = authService.register(userRequestDTO);

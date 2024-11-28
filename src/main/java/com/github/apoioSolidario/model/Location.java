@@ -42,8 +42,6 @@ public class Location implements Serializable {
     private BigDecimal latitude ;
     @Column( precision = 9,scale = 6)
     private BigDecimal longitude ;
-    @OneToMany(mappedBy = "location",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private List<Event> events;
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;

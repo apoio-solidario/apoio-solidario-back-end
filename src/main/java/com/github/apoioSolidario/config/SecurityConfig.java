@@ -27,14 +27,49 @@ public class SecurityConfig {
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequest -> authorizeRequest
-                        .requestMatchers(HttpMethod.GET,"/api/v1/ongs").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/v1/ongs").hasAnyRole("ADMIN","ONG")
-                        .requestMatchers(HttpMethod.GET,"/api/v1/ongs/${id}").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.GET,"/api/v1/ongs/${id}").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/v1/ongs/user/{id}").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/v1/ongs/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/v1/ongs").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/ongs").hasRole("ADMIN")
 
+                        .requestMatchers(HttpMethod.GET,"/api/v1/ongSocials/${id}").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/ongSocials/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/v1/ongSocials").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/ongSocials").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET,"/api/v1/feedbacks/${id}").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/feedbacks/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/v1/feedbacks").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/feedbacks").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET,"/api/v1/images/${id}").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/images/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/v1/images/ongs").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/images").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET,"/api/v1/locations/${id}").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/locations/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/v1/locations").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/locations").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET,"/api/v1/campaigns/${id}").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/campaigns/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/v1/campaigns").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/campaigns").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET,"/api/v1/events/${id}").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/events/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/v1/events").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/events").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET,"/events").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/campaigns").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/ongs").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                       // .requestMatchers(HttpMethod.POST, "/auth/register").hasRole("ADMIN")
+
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

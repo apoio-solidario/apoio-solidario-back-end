@@ -7,7 +7,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -41,14 +40,9 @@ public class Ong implements Serializable {
     @Column(nullable = false, name = "category",length = 100)
     private String category;
 
-    @OneToMany(mappedBy = "ong",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private List<Image> images;
-    @OneToMany(mappedBy = "ong",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private List<OngSocial> socials;
-    @OneToMany(mappedBy = "ong",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private List<Campaign> campaigns;
-    @OneToMany(mappedBy = "ong",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private List<Event> events;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "userId")
+    private User user;
 
     @CreatedDate
     @Column(name = "created_at")

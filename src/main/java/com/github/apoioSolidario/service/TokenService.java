@@ -36,7 +36,6 @@ public class TokenService {
 
     public String validateToken(String token) {
         try {
-
             return JWT.require(algorithm)
                     .withIssuer(issue)
                     .build()
