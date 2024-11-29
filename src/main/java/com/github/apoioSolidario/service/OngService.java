@@ -9,6 +9,7 @@ import com.github.apoioSolidario.exception.EntityNotFoundException;
 import com.github.apoioSolidario.exception.UniqueDataException;
 import com.github.apoioSolidario.repository.OngRepository;
 import com.github.apoioSolidario.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -39,10 +41,15 @@ public class OngService {
         var entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Ong com id %s não encontrada", id)));
         return mapper.toObject(entity, OngResponse.class);
     }
-
-    public OngResponse findByUserId(UUID id) {
-        var entity = repository.findByUser_UserId(id).orElseThrow(() -> new EntityNotFoundException(String.format("Ong com user_id %s não encontrada", id)));
-        return mapper.toObject(entity, OngResponse.class);
+    @Transactional()
+    public List<OngResponse> findByUserId(UUID id) {
+        var entity = repository.findByUser_UserId(id);
+        return  mapper.toList(entity, OngResponse.class);
+    }
+    @Transactional()
+    public OngResponse findByHandler(String handler) {
+        var entity = repository.findByHandler(handler).orElseThrow(() -> new EntityNotFoundException(String.format("Ong com handler %s não encontrada", handler)));
+        return  mapper.toObject(entity, OngResponse.class);
     }
 
     public OngResponse save(OngRequest ongRequest) {

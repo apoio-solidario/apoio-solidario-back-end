@@ -53,7 +53,7 @@ public class OngController {
                     content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     @GetMapping("/user/{id}")
-    public ResponseEntity<OngResponse> getOngByUserId(@Valid @PathVariable UUID id) {
+    public ResponseEntity<List<OngResponse>> getByUserId(@Valid @PathVariable UUID id) {
         return ResponseEntity.ok().body(ongService.findByUserId(id));
     }
 
@@ -66,6 +66,17 @@ public class OngController {
     @GetMapping("/{id}")
     public ResponseEntity<OngResponse> getOng(@Valid @PathVariable UUID id) {
         return ResponseEntity.ok().body(ongService.findById(id));
+    }
+
+    @Operation(summary = "Recuperar uma organização pelo handler")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Entidade não encontrada",
+                    content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
+    })
+    @GetMapping("/handler/{handler}")
+    public ResponseEntity<OngResponse> getByHandler(@Valid @PathVariable String handler) {
+        return ResponseEntity.ok().body(ongService.findByHandler(handler));
     }
 
     @Operation(summary = "Atualizar uma organização pelo ID")

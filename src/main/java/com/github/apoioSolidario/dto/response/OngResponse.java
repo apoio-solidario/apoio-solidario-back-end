@@ -29,6 +29,7 @@ public class OngResponse {
     private String imageBanner;
     private String status;
     private String category;
+    private String handler;
     @JsonProperty("user_id")
     private UUID userId;
     @JsonProperty("created_at")

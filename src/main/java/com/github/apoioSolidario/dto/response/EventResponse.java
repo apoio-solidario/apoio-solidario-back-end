@@ -23,6 +23,7 @@ public class EventResponse {
     @JsonProperty("image_banner")
     private String imageBanner;
     private String status;
+    private String handler;
     @JsonProperty("location_id")
     private UUID locationId;
     @JsonProperty("ong_id")

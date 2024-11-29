@@ -35,6 +35,8 @@ public class CampaignRequest {
     @NotNull(message = "O valor arrecadado não pode ser nulo.")
     @JsonProperty("amount_raised")
     private BigDecimal amountRaised;
+    @NotBlank(message = "A handler não pode estar vazia.")
+    private String handler;
     @NotBlank(message = "A imagem de perfil não pode estar vazia.")
     @JsonProperty("image_profile")
     private String imageProfile;

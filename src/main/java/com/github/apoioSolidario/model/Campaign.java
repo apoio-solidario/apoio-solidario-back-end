@@ -41,6 +41,8 @@ public class Campaign implements Serializable {
     private String imageBanner;
     @Column(nullable = false,length = 50)
     private String status;
+    @Column(nullable = false, name = "handler",length = 100,unique = true)
+    private String handler;
 
 
     @ManyToOne(fetch = FetchType.LAZY)

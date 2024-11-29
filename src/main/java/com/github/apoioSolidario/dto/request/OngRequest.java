@@ -35,6 +35,8 @@ public class OngRequest {
     private String status;
     @NotBlank(message = "A Categoria não pode estar vazia.")
     private String category;
+    @NotBlank(message = "A handler não pode estar vazia.")
+    private String handler;
     @NotBlank(message = "O e-mail não pode estar vazio.")
     @Email(message = "O e-mail deve ser válido.")
     @Size(max = 100, message = "O e-mail deve ter no máximo 100 caracteres.")

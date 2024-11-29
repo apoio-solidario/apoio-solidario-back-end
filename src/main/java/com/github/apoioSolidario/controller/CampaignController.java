@@ -3,6 +3,7 @@ package com.github.apoioSolidario.controller;
 import com.github.apoioSolidario.dto.request.CampaignRequest;
 import com.github.apoioSolidario.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.dto.response.CampaignResponse;
+import com.github.apoioSolidario.dto.response.EventResponse;
 import com.github.apoioSolidario.service.CampaignService;
 import com.github.apoioSolidario.exception.config.ErrorMessage;
 import com.github.apoioSolidario.utils.ResponseUtils;
@@ -58,6 +59,16 @@ public class CampaignController {
     @GetMapping("/{id}")
     public ResponseEntity<CampaignResponse> getCampaign(@Valid @PathVariable UUID id) {
         return ResponseEntity.ok().body(service.findById(id));
+    }
+    @Operation(summary = "Recuperar uma campanha pelo handler")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Entidade não encontrada",
+                    content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
+    })
+    @GetMapping("/handler/{handler}")
+    public ResponseEntity<CampaignResponse> getByHandler(@Valid @PathVariable String handler) {
+        return ResponseEntity.ok().body(service.findByHandler(handler));
     }
 
     @Operation(summary = "Atualizar de status de um campanha específico pelo ID")

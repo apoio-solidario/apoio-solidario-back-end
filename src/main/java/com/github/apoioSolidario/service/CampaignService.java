@@ -4,11 +4,13 @@ import com.github.apoioSolidario.dto.mapper.CampaignMapper;
 import com.github.apoioSolidario.dto.request.CampaignRequest;
 import com.github.apoioSolidario.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.dto.response.CampaignResponse;
+import com.github.apoioSolidario.dto.response.OngResponse;
 import com.github.apoioSolidario.model.Campaign;
 import com.github.apoioSolidario.model.Ong;
 import com.github.apoioSolidario.exception.EntityNotFoundException;
 import com.github.apoioSolidario.repository.CampaignRepository;
 import com.github.apoioSolidario.repository.OngRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +36,11 @@ public class CampaignService {
         var entity = repository.findById(id).orElseThrow(()-> new EntityNotFoundException(id,"campaign"));
         return mapper.toObject(entity,CampaignResponse.class);
     }
-
+    @Transactional()
+    public CampaignResponse findByHandler(String handler) {
+        var entity = repository.findByHandler(handler).orElseThrow(() -> new EntityNotFoundException(String.format("Campaingn com handler %s não encontrada", handler)));
+        return  mapper.toObject(entity, CampaignResponse.class);
+    }
     public CampaignResponse save( CampaignRequest request) {
         Ong ong = ongRepository.findById(request.getOngId()).orElseThrow(()-> new EntityNotFoundException(request.getOngId(), "Ong"));
         Campaign entity = mapper.toObject(request,Campaign.class);

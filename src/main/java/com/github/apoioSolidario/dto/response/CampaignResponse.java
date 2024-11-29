@@ -32,6 +32,7 @@ public class CampaignResponse {
     private String imageProfile;
     @JsonProperty("image_banner")
     private String imageBanner;
+    private String handler;
     private String status;
     @JsonProperty("ong_id")
     private UUID ongId;

@@ -15,5 +15,7 @@ public interface OngRepository extends JpaRepository<Ong, UUID> {
     @Override
     Page<Ong> findAll(Pageable pageable);
 
-    Optional<List<Ong>> findByUser_UserId(UUID userId);
+    List<Ong> findByUser_UserId(UUID userId);
+
+    Optional<Ong> findByHandler(String handler);
 }

@@ -3,6 +3,7 @@ package com.github.apoioSolidario.service;
 import com.github.apoioSolidario.dto.mapper.EventMapper;
 import com.github.apoioSolidario.dto.request.EventRequest;
 import com.github.apoioSolidario.dto.request.UpdateStatusRequest;
+import com.github.apoioSolidario.dto.response.CampaignResponse;
 import com.github.apoioSolidario.dto.response.EventResponse;
 import com.github.apoioSolidario.model.Event;
 import com.github.apoioSolidario.model.Location;
@@ -11,6 +12,7 @@ import com.github.apoioSolidario.exception.EntityNotFoundException;
 import com.github.apoioSolidario.repository.EventRepository;
 import com.github.apoioSolidario.repository.LocationRepository;
 import com.github.apoioSolidario.repository.OngRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +43,11 @@ public class EventService {
     public EventResponse findById(UUID id) {
         var entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, "Event"));
         return mapper.toObject(entity, EventResponse.class);
+    }
+    @Transactional()
+    public EventResponse findByHandler(String handler) {
+        var entity = repository.findByHandler(handler).orElseThrow(() -> new EntityNotFoundException(String.format("Campaingn com handler %s não encontrada", handler)));
+        return  mapper.toObject(entity, EventResponse.class);
     }
 
     public EventResponse save(EventRequest request) {

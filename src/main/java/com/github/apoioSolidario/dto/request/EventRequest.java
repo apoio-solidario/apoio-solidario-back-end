@@ -36,6 +36,8 @@ public class EventRequest {
     @NotBlank(message = "O status não pode estar vazio.")
     @Size(max = 50, message = "O status deve ter no máximo 50 caracteres.")
     private String status;
+    @NotBlank(message = "A handler não pode estar vazia.")
+    private String handler;
     @NotNull(message = "O ID da localização não pode ser nulo.")
     @JsonProperty("location_id")
     private UUID locationId;
