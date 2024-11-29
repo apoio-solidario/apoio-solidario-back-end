@@ -23,6 +23,9 @@ public class CampaignRequest {
     @NotBlank(message = "A descrição não pode estar vazia.")
     @Size(min = 5, message = "O nome deve ter no mínimo 5 caracteres.")
     private String description;
+    @NotBlank(message = "O content não pode estar vazia.")
+    @Size(min = 5, message = "O content deve ter no mínimo 5 caracteres.")
+    private String content;
     @NotNull(message = "A data de início não pode ser nula.")
     @JsonProperty("start_data")
     private LocalDateTime startData;

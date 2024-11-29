@@ -16,6 +16,7 @@ public class EventResponse {
     private UUID eventId;
     private String title;
     private String description;
+    private String content;
     @JsonProperty("start_data")
     private LocalDateTime startData;
     @JsonProperty("image_profile")

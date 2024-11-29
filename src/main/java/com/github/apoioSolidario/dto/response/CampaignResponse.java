@@ -20,6 +20,7 @@ public class CampaignResponse {
     private UUID campaignId;
     private String title;
     private String description;
+    private String content;
     @JsonProperty("start_data")
     private LocalDateTime startData;
     @JsonProperty("end_data")

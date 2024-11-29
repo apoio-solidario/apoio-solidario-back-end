@@ -69,6 +69,8 @@ public class EventService {
         Location location = locationRepository.findById(request.getLocationId()).orElseThrow(() -> new EntityNotFoundException(request.getOngId(), "Location"));
         entity.setTitle(request.getTitle());
         entity.setDescription(request.getDescription());
+        entity.setContent(request.getContent());
+        entity.setHandler(request.getHandler());
         entity.setLocation(location);
         entity.setOng(ong);
         entity.setStartData(request.getStartData());

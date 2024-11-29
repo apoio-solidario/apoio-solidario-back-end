@@ -3,6 +3,8 @@ package com.github.apoioSolidario.dto.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,6 +21,7 @@ public class OngResponse {
     private UUID ongId;
     private String name;
     private String description;
+    private String content;
     @JsonProperty("website_url")
     private String websiteUrl;
     private String email;

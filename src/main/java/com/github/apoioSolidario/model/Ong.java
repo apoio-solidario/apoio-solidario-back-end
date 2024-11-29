@@ -41,6 +41,9 @@ public class Ong implements Serializable {
     private String category;
     @Column(nullable = false, name = "handler",length = 100,unique = true)
     private String handler;
+    @Lob
+    @Column(nullable = false)
+    private String content;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "userId")

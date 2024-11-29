@@ -19,8 +19,12 @@ public class OngRequest {
     @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres.")
     private String name;
     @NotBlank(message = "A descrição não pode estar vazia.")
-    @Size(min = 5, message = "O nome deve ter no mínimo 5 caracteres.")
+    @Size(min = 5, message = "O descrição deve ter no mínimo 5 caracteres.")
     private String description;
+    @NotBlank(message = "O content não pode estar vazia.")
+    @Size(min = 5, message = "O content deve ter no mínimo 5 caracteres.")
+    private String content;
+
     @Size(max = 255, message = "A URL do site deve ter no máximo 255 caracteres.")
     @JsonProperty("website_url")
     private String websiteUrl;

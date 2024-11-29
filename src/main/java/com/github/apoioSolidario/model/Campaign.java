@@ -26,6 +26,9 @@ public class Campaign implements Serializable {
     @Lob
     @Column(nullable = false)
     private String description;
+    @Lob
+    @Column(nullable = false)
+    private String content;
     @Column(nullable = false, name = "start_data")
     private LocalDateTime startData;
     @LastModifiedDate

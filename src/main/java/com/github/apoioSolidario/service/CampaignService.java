@@ -57,6 +57,8 @@ public class CampaignService {
         Ong ong = ongRepository.findById(request.getOngId()).orElseThrow(()-> new EntityNotFoundException(request.getOngId(), "Ong"));
         entity.setOng(ong);
         entity.setDescription(request.getDescription());
+        entity.setContent(request.getContent());
+        entity.setHandler(request.getHandler());
         entity.setGoalAmount(request.getGoalAmount());
         entity.setAmountRaised(request.getAmountRaised());
         entity.setStatus(request.getStatus());
