@@ -12,12 +12,15 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class TokenService {
     private final String secret = "0123456789-0123456789-0123456789";
     private final Algorithm algorithm = Algorithm.HMAC256(secret);
     private final String issue = "apoio-solidario-auth";
+    private Set<String> blacklist = new HashSet<>();
 
     public String generateToken(User user) {
         try {
@@ -50,4 +53,12 @@ public class TokenService {
         return LocalDateTime.now().plusHours(10).toInstant(ZoneOffset.of("-03:00"));
     }
 
+    public void addToBlackList(String token){
+        blacklist.add(token);
+    }
+
+    public boolean isBlackListed(String token){
+        token = "Bearer "+token;
+        return blacklist.contains(token);
+    }
 }

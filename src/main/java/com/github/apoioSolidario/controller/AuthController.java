@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -61,5 +62,18 @@ public class AuthController {
         UserResponse responseDTO = authService.register(userRequestDTO);
         URI url = ServletUriComponentsBuilder.fromCurrentRequest().path("${id}").buildAndExpand(responseDTO.getUserId()).toUri();
         return ResponseEntity.created(url).body(responseDTO);
+    }
+
+    @Operation(summary = "Realizar logout no sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Logout realizado com sucesso")
+    })
+    @PostMapping("/Logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        if(this.tokenService.validateToken(token).isEmpty()) {
+            this.tokenService.addToBlackList(token);
+        }
+        return ResponseEntity.ok().build();
     }
 }
