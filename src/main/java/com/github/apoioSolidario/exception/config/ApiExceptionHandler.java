@@ -1,9 +1,6 @@
 package com.github.apoioSolidario.exception.config;
 
-import com.github.apoioSolidario.exception.EntityNotFoundException;
-import com.github.apoioSolidario.exception.GenerationTokenException;
-import com.github.apoioSolidario.exception.UniqueDataException;
-import com.github.apoioSolidario.exception.UserAlreadyExistException;
+import com.github.apoioSolidario.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -46,6 +43,14 @@ public class ApiExceptionHandler{
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request,HttpStatus.BAD_REQUEST,ex.getMessage()));
     }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<ErrorMessage> tokenExpiredException(TokenExpiredException ex, HttpServletRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request,HttpStatus.BAD_REQUEST,ex.getMessage()));
+    }
+
     @ExceptionHandler(UserAlreadyExistException.class)
     public ResponseEntity<ErrorMessage> userAlreadyExistException(UserAlreadyExistException ex, HttpServletRequest request){
         return ResponseEntity.status(HttpStatus.CONFLICT)

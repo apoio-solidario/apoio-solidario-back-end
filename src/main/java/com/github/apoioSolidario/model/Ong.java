@@ -45,7 +45,7 @@ public class Ong implements Serializable {
     @Column(nullable = false)
     private String content;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "userId")
     private User user;
 

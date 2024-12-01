@@ -43,9 +43,9 @@ public class OngService {
         return mapper.toObject(entity, OngResponse.class);
     }
     @Transactional()
-    public List<OngResponse> findByUserId(UUID id,String category,String status) {
-        var entity = repository.findByUser_UserId(id);
-        return  mapper.toList(entity, OngResponse.class);
+    public OngResponse findByUserId(UUID id,String category,String status) {
+        var entity = repository.findByUser_UserId(id).orElseThrow(()->new EntityNotFoundException("Ong atrelada ao usuario não encontrada"));
+        return  mapper.toObject(entity, OngResponse.class);
     }
     @Transactional()
     public OngResponse findByHandler(String handler) {

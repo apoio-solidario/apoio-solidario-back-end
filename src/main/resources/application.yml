@@ -17,11 +17,20 @@ spring:
     url: jdbc:${DB_TYPE}://${DB_HOST}:${DB_PORT}/${DB_NAME}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+  # Configuração de email
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: ${MAIL_AUTH}
+      mail.smtp.starttls.enable: ${MAIL_START_TLS}
 
   # Configura��es de JPA/Hibernate
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
 
   # Configura��es de perfil ativo
@@ -32,4 +41,6 @@ spring:
 springdoc:
   swagger-ui:
       path: ${SWAGGER_LINK}
+
+
 

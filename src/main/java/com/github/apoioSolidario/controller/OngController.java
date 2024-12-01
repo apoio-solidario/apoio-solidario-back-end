@@ -53,7 +53,7 @@ public class OngController {
                     content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<OngResponse>> getByUserId(@Valid @PathVariable UUID id,@RequestParam(required = false) String category,@RequestParam(required = false) String status) {
+    public ResponseEntity<OngResponse> getByUserId(@Valid @PathVariable UUID id,@RequestParam(required = false) String category,@RequestParam(required = false) String status) {
         return ResponseEntity.ok().body(ongService.findByUserId(id,category,status));
     }
 
