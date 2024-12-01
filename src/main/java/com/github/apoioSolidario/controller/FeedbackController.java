@@ -1,6 +1,7 @@
 package com.github.apoioSolidario.controller;
 
 import com.github.apoioSolidario.dto.request.FeedbackRequest;
+import com.github.apoioSolidario.dto.response.EventResponse;
 import com.github.apoioSolidario.dto.response.FeedbackResponse;
 import com.github.apoioSolidario.service.FeedbackService;
 import com.github.apoioSolidario.exception.config.ErrorMessage;
@@ -96,5 +97,28 @@ public class FeedbackController {
     public ResponseEntity<Void> deleteFeedback(@Valid @PathVariable UUID id) {
         service.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+    @Operation(summary = "Recuperar uma evento pelo id da localização associada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso")
+    })
+    @GetMapping("/campaign/{id}")
+    public ResponseEntity<List<FeedbackResponse>> getByLocationId(@Valid @PathVariable UUID id, Pageable pageable) {
+        Page<FeedbackResponse> feedback = service.finByEventId(id,pageable);
+        List<FeedbackResponse> feedbackResponse = feedback.getContent();
+        HttpHeaders headers = responseUtils.getHeaders(feedback);
+        return ResponseEntity.ok().headers(headers).body(feedbackResponse);
+    }
+
+    @Operation(summary = "Recuperar uma evento pelo id da evento associada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso")
+    })
+    @GetMapping("/event/{id}")
+    public ResponseEntity<List<FeedbackResponse>> getByEventId(@Valid @PathVariable UUID id, Pageable pageable) {
+        Page<FeedbackResponse> feedback = service.finByEventId(id,pageable);
+        List<FeedbackResponse> feedbackResponse = feedback.getContent();
+        HttpHeaders headers = responseUtils.getHeaders(feedback);
+        return ResponseEntity.ok().headers(headers).body(feedbackResponse);
     }
 }

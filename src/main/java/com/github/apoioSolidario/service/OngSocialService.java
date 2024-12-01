@@ -8,6 +8,7 @@ import com.github.apoioSolidario.model.OngSocial;
 import com.github.apoioSolidario.exception.EntityNotFoundException;
 import com.github.apoioSolidario.repository.OngRepository;
 import com.github.apoioSolidario.repository.OngSocialRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,6 +62,10 @@ public class OngSocialService {
     public void deleteById(@Valid UUID id) {
         var entity = repository.findById(id).orElseThrow(()-> new EntityNotFoundException(id,"OngSocial"));
         repository.deleteById(entity.getOngSocialId());
+    }
+    @Transactional
+    public Page<OngSocialResponse> finByOngId(UUID id, Pageable pageable) {
+        return mapper.toPage(repository.findByOng_OngId(id, pageable), OngSocialResponse.class);
     }
 
 }

@@ -3,7 +3,6 @@ package com.github.apoioSolidario.service;
 import com.github.apoioSolidario.dto.mapper.EventMapper;
 import com.github.apoioSolidario.dto.request.EventRequest;
 import com.github.apoioSolidario.dto.request.UpdateStatusRequest;
-import com.github.apoioSolidario.dto.response.CampaignResponse;
 import com.github.apoioSolidario.dto.response.EventResponse;
 import com.github.apoioSolidario.model.Event;
 import com.github.apoioSolidario.model.Location;
@@ -44,10 +43,11 @@ public class EventService {
         var entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, "Event"));
         return mapper.toObject(entity, EventResponse.class);
     }
+
     @Transactional()
     public EventResponse findByHandler(String handler) {
         var entity = repository.findByHandler(handler).orElseThrow(() -> new EntityNotFoundException(String.format("Campaingn com handler %s não encontrada", handler)));
-        return  mapper.toObject(entity, EventResponse.class);
+        return mapper.toObject(entity, EventResponse.class);
     }
 
     public EventResponse save(EventRequest request) {
@@ -92,5 +92,15 @@ public class EventService {
         entity.setStatus(request.getStatus());
         entity.setUpdatedAt(LocalDateTime.now());
         return mapper.toObject(repository.save(entity), EventResponse.class);
+    }
+
+    @Transactional
+    public Page<EventResponse> finByOngId(UUID id, Pageable pageable) {
+        return mapper.toPage(repository.findByOng_OngId(id, pageable), EventResponse.class);
+    }
+
+    @Transactional
+    public Page<EventResponse> finByLocationId(UUID id, Pageable pageable) {
+        return mapper.toPage(repository.findByLocation_LocationId(id, pageable), EventResponse.class);
     }
 }

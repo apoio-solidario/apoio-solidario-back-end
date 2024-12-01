@@ -4,6 +4,7 @@ import com.github.apoioSolidario.dto.mapper.CampaignMapper;
 import com.github.apoioSolidario.dto.request.CampaignRequest;
 import com.github.apoioSolidario.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.dto.response.CampaignResponse;
+import com.github.apoioSolidario.dto.response.EventResponse;
 import com.github.apoioSolidario.dto.response.OngResponse;
 import com.github.apoioSolidario.model.Campaign;
 import com.github.apoioSolidario.model.Ong;
@@ -86,6 +87,10 @@ public class CampaignService {
 
     public Page<CampaignResponse> findAll(Pageable pageable) {
         return  mapper.toPage(repository.findAll(pageable), CampaignResponse.class);
+    }
+    @Transactional
+    public Page<CampaignResponse> finByOngId(UUID id, Pageable pageable) {
+        return mapper.toPage(repository.findByOng_OngId(id, pageable), CampaignResponse.class);
     }
 
 

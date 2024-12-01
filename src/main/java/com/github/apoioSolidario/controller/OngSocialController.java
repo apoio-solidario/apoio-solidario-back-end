@@ -1,6 +1,7 @@
 package com.github.apoioSolidario.controller;
 
 import com.github.apoioSolidario.dto.request.OngSocialRequest;
+import com.github.apoioSolidario.dto.response.ImageResponse;
 import com.github.apoioSolidario.dto.response.OngSocialResponse;
 import com.github.apoioSolidario.service.OngSocialService;
 import com.github.apoioSolidario.exception.config.ErrorMessage;
@@ -56,6 +57,18 @@ public class OngSocialController {
     @GetMapping("/{id}")
     public ResponseEntity<OngSocialResponse> getOngSocial(@Valid @PathVariable UUID id) {
         return ResponseEntity.ok().body(service.findById(id));
+    }
+
+    @Operation(summary = "Recuperar uma redes siciais pelo id da ong associada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso")
+    })
+    @GetMapping("/ong/{id}")
+    public ResponseEntity<List<OngSocialResponse>> getByOngId(@Valid @PathVariable UUID id, Pageable pageable) {
+        Page<OngSocialResponse> ongSocials = service.finByOngId(id,pageable);
+        List<OngSocialResponse> ongSocialResponse = ongSocials.getContent();
+        HttpHeaders headers = responseUtils.getHeaders(ongSocials);
+        return ResponseEntity.ok().headers(headers).body(ongSocialResponse);
     }
 
     @Operation(summary = "Atualizar uma rede social específica de ONG pelo ID")

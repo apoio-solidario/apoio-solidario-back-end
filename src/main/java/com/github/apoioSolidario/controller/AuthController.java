@@ -27,13 +27,11 @@ import java.net.URI;
 @RequestMapping("auth")
 public class AuthController {
     private AuthenticationManager authenticationManager;
-    private PasswordEncoder passwordEncoder;
     private AuthService authService;
     private TokenService tokenService;
 
-    public AuthController(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, AuthService authService, TokenService tokenService) {
+    public AuthController(AuthenticationManager authenticationManager, AuthService authService, TokenService tokenService) {
         this.authenticationManager = authenticationManager;
-        this.passwordEncoder = passwordEncoder;
         this.authService = authService;
         this.tokenService = tokenService;
     }
@@ -50,16 +48,7 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(token));
     }
 
-    @Operation(summary = "Registrar um novo usuário no sistema")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário registrado com sucesso")
-    })
-    @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@RequestBody @Valid UserRequest userRequestDTO) {
-        UserResponse responseDTO = authService.register(userRequestDTO);
-        URI url = ServletUriComponentsBuilder.fromCurrentRequest().path("${id}").buildAndExpand(responseDTO.getUserId()).toUri();
-        return ResponseEntity.created(url).body(responseDTO);
-    }
+
 
     @Operation(summary = "Recuperar senha de um usuário no sistema")
     @ApiResponses(value = {

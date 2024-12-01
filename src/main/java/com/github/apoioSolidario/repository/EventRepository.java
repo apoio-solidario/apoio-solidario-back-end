@@ -1,7 +1,7 @@
 package com.github.apoioSolidario.repository;
 
 import com.github.apoioSolidario.model.Event;
-import com.github.apoioSolidario.model.Ong;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +15,8 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Override
     Page<Event> findAll(Pageable pageable);
     Optional<Event> findByHandler(String handler);
+
+    Page<Event> findByOng_OngId(@Valid UUID id, Pageable pageable);
+    Page<Event> findByLocation_LocationId(@Valid UUID id, Pageable pageable);
 
 }

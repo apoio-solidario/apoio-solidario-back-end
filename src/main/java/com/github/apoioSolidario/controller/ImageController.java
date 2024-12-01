@@ -1,6 +1,7 @@
 package com.github.apoioSolidario.controller;
 
 import com.github.apoioSolidario.dto.request.ImageRequest;
+import com.github.apoioSolidario.dto.response.EventResponse;
 import com.github.apoioSolidario.dto.response.ImageResponse;
 import com.github.apoioSolidario.service.ImageService;
 import com.github.apoioSolidario.exception.config.ErrorMessage;
@@ -56,6 +57,18 @@ public class ImageController {
     @GetMapping("/{id}")
     public ResponseEntity<ImageResponse> getImage(@Valid @PathVariable UUID id) {
         return ResponseEntity.ok().body(service.findById(id));
+    }
+
+    @Operation(summary = "Recuperar uma imagens pelo id da ong associada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso")
+    })
+    @GetMapping("/ong/{id}")
+    public ResponseEntity<List<ImageResponse>> getByOngId(@Valid @PathVariable UUID id, Pageable pageable) {
+        Page<ImageResponse> images = service.finByEntityId(id,pageable);
+        List<ImageResponse> imageResponse = images.getContent();
+        HttpHeaders headers = responseUtils.getHeaders(images);
+        return ResponseEntity.ok().headers(headers).body(imageResponse);
     }
 
     @Operation(summary = "Atualizar uma imagem específica pelo ID")

@@ -25,7 +25,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                /*.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequest -> authorizeRequest
                         .requestMatchers(HttpMethod.GET,"/api/v1/ongs/${id}").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.GET,"/api/v1/ongs/user/{id}").hasAnyRole("ADMIN")
@@ -68,6 +68,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/events").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/Logout").hasRole("ADMIN")
 
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/${id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/${id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/${id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
+
+
+
 
                         .requestMatchers(HttpMethod.GET,"/events").permitAll()
                         .requestMatchers(HttpMethod.GET,"/campaigns").permitAll()
@@ -75,12 +82,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/reset-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/reset-password/confirm").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                       // .requestMatchers(HttpMethod.POST, "/auth/register").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                       // .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
 
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
-                ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)*/
                 .build();
     }
     @Bean

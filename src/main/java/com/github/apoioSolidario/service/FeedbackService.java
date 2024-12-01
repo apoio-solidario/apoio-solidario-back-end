@@ -2,6 +2,7 @@ package com.github.apoioSolidario.service;
 
 import com.github.apoioSolidario.dto.mapper.FeedbackMapper;
 import com.github.apoioSolidario.dto.request.FeedbackRequest;
+import com.github.apoioSolidario.dto.response.EventResponse;
 import com.github.apoioSolidario.dto.response.FeedbackResponse;
 import com.github.apoioSolidario.model.Campaign;
 import com.github.apoioSolidario.model.Event;
@@ -10,6 +11,7 @@ import com.github.apoioSolidario.exception.EntityNotFoundException;
 import com.github.apoioSolidario.repository.CampaignRepository;
 import com.github.apoioSolidario.repository.EventRepository;
 import com.github.apoioSolidario.repository.FeedbackRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -73,5 +75,15 @@ public class FeedbackService {
 
     public Page<FeedbackResponse> findAll(Pageable pageable) {
        return  mapper.toPage(repository.findAll(pageable),FeedbackResponse.class);
+    }
+
+    @Transactional
+    public Page<FeedbackResponse> finByEventId(UUID id, Pageable pageable) {
+        return mapper.toPage(repository.findByEvent_EventId(id, pageable), FeedbackResponse.class);
+    }
+
+    @Transactional
+    public Page<FeedbackResponse> finByCampaignId(UUID id, Pageable pageable) {
+        return mapper.toPage(repository.findByCampaign_CampaignId(id, pageable), FeedbackResponse.class);
     }
 }

@@ -4,6 +4,7 @@ import com.github.apoioSolidario.dto.request.EventRequest;
 import com.github.apoioSolidario.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.dto.response.EventResponse;
 import com.github.apoioSolidario.dto.response.OngResponse;
+import com.github.apoioSolidario.repository.EventRepository;
 import com.github.apoioSolidario.service.EventService;
 import com.github.apoioSolidario.exception.config.ErrorMessage;
 import com.github.apoioSolidario.utils.ResponseUtils;
@@ -67,6 +68,29 @@ public class EventController {
     @GetMapping("/handler/{handler}")
     public ResponseEntity<EventResponse> getByHandler(@Valid @PathVariable String handler) {
         return ResponseEntity.ok().body(service.findByHandler(handler));
+    }
+    @Operation(summary = "Recuperar uma evento pelo id da ong associada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso")
+    })
+    @GetMapping("/ong/{id}")
+    public ResponseEntity<List<EventResponse>> getByOngId(@Valid @PathVariable UUID id, Pageable pageable) {
+        Page<EventResponse> events = service.finByOngId(id,pageable);
+        List<EventResponse> eventResponses = events.getContent();
+        HttpHeaders headers = responseUtils.getHeaders(events);
+        return ResponseEntity.ok().headers(headers).body(eventResponses);
+    }
+
+    @Operation(summary = "Recuperar uma evento pelo id da localização associada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso")
+    })
+    @GetMapping("/location/{id}")
+    public ResponseEntity<List<EventResponse>> getByLocationId(@Valid @PathVariable UUID id, Pageable pageable) {
+        Page<EventResponse> events = service.finByLocationId(id,pageable);
+        List<EventResponse> eventResponses = events.getContent();
+        HttpHeaders headers = responseUtils.getHeaders(events);
+        return ResponseEntity.ok().headers(headers).body(eventResponses);
     }
 
     @Operation(summary = "Atualizar um evento específico pelo ID")

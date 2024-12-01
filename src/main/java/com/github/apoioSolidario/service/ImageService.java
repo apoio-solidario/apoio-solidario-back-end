@@ -2,12 +2,14 @@ package com.github.apoioSolidario.service;
 
 import com.github.apoioSolidario.dto.mapper.ImageMapper;
 import com.github.apoioSolidario.dto.request.ImageRequest;
+import com.github.apoioSolidario.dto.response.EventResponse;
 import com.github.apoioSolidario.dto.response.ImageResponse;
 import com.github.apoioSolidario.model.Image;
 import com.github.apoioSolidario.model.Ong;
 import com.github.apoioSolidario.exception.EntityNotFoundException;
 import com.github.apoioSolidario.repository.OngImageRepository;
 import com.github.apoioSolidario.repository.OngRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -65,5 +67,9 @@ public class ImageService {
         var entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, "Ong Images")
         );
         repository.delete(entity);
+    }
+    @Transactional
+    public Page<ImageResponse> finByEntityId(UUID id, Pageable pageable) {
+        return mapper.toPage(repository.findByOng_OngId(id, pageable), ImageResponse.class);
     }
 }

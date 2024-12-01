@@ -27,28 +27,18 @@ public class AuthService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final GenericMapper genericMapper;
     private final MailService mailService;
     private final OngRepository ongRepository;
     private final TokenRepository tokenRepository;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, GenericMapper genericMapper, MailService mailService, OngRepository ongRepository, TokenRepository tokenRepository) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, MailService mailService, OngRepository ongRepository, TokenRepository tokenRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.genericMapper = genericMapper;
         this.mailService = mailService;
         this.ongRepository = ongRepository;
         this.tokenRepository = tokenRepository;
     }
 
-    public UserResponse register(UserRequest request) {
-        if (userRepository.findByUsername(request.getUsername()) != null)
-            throw new UserAlreadyExistException("Usuario já cadastrado");
-        String encriptPass = passwordEncoder.encode(request.getPassword());
-        request.setPassword(encriptPass);
-        User newUser = genericMapper.toObject(request, User.class);
-        return genericMapper.toObject(userRepository.save(newUser), UserResponse.class);
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

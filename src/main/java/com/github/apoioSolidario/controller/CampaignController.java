@@ -60,6 +60,7 @@ public class CampaignController {
     public ResponseEntity<CampaignResponse> getCampaign(@Valid @PathVariable UUID id) {
         return ResponseEntity.ok().body(service.findById(id));
     }
+
     @Operation(summary = "Recuperar uma campanha pelo handler")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso"),
@@ -69,6 +70,18 @@ public class CampaignController {
     @GetMapping("/handler/{handler}")
     public ResponseEntity<CampaignResponse> getByHandler(@Valid @PathVariable String handler) {
         return ResponseEntity.ok().body(service.findByHandler(handler));
+    }
+
+    @Operation(summary = "Recuperar uma Camapanhas pelo id da ong associada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso")
+    })
+    @GetMapping("/ong/{id}")
+    public ResponseEntity<List<CampaignResponse>> getByOngId(@Valid @PathVariable UUID id, Pageable pageable) {
+        Page<CampaignResponse> campaigns = service.finByOngId(id, pageable);
+        List<CampaignResponse> campaignResponses = campaigns.getContent();
+        HttpHeaders headers = responseUtils.getHeaders(campaigns);
+        return ResponseEntity.ok().headers(headers).body(campaignResponses);
     }
 
     @Operation(summary = "Atualizar de status de um campanha específico pelo ID")
@@ -81,7 +94,7 @@ public class CampaignController {
     })
     @PutMapping("status/{id}")
     public ResponseEntity<CampaignResponse> updateStatusCampaign(@Valid @PathVariable UUID id,
-                                                           @RequestBody @Valid UpdateStatusRequest request) {
+                                                                 @RequestBody @Valid UpdateStatusRequest request) {
         var response = service.updateStatus(id, request);
         return ResponseEntity.ok(response);
     }
