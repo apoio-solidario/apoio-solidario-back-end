@@ -12,6 +12,7 @@ import com.github.apoioSolidario.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class OngService {
         return mapper.toObject(entity, OngResponse.class);
     }
     @Transactional()
-    public List<OngResponse> findByUserId(UUID id) {
+    public List<OngResponse> findByUserId(UUID id,String category,String status) {
         var entity = repository.findByUser_UserId(id);
         return  mapper.toList(entity, OngResponse.class);
     }

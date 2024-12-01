@@ -53,8 +53,8 @@ public class OngController {
                     content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<OngResponse>> getByUserId(@Valid @PathVariable UUID id) {
-        return ResponseEntity.ok().body(ongService.findByUserId(id));
+    public ResponseEntity<List<OngResponse>> getByUserId(@Valid @PathVariable UUID id,@RequestParam(required = false) String category,@RequestParam(required = false) String status) {
+        return ResponseEntity.ok().body(ongService.findByUserId(id,category,status));
     }
 
     @Operation(summary = "Recuperar uma organização pelo ID")
