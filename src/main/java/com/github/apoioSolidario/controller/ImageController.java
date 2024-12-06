@@ -1,6 +1,7 @@
 package com.github.apoioSolidario.controller;
 
 import com.github.apoioSolidario.dto.request.ImageRequest;
+import com.github.apoioSolidario.dto.request.ImageUpdateRequest;
 import com.github.apoioSolidario.dto.response.EventResponse;
 import com.github.apoioSolidario.dto.response.ImageResponse;
 import com.github.apoioSolidario.service.ImageService;
@@ -80,9 +81,9 @@ public class ImageController {
                     content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     @PutMapping("/{id}")
-    public ResponseEntity<ImageResponse> updateImage(@Valid @PathVariable UUID id,
-                                                        @RequestBody @Valid ImageRequest imageRequest) {
-        var response = service.update(id, imageRequest);
+    public ResponseEntity<ImageResponse> updateImage(@PathVariable UUID id,
+                                                     @Valid ImageUpdateRequest imageUpdateRequest) {
+        var response = service.update(id, imageUpdateRequest);
         return ResponseEntity.ok(response);
     }
 
@@ -93,7 +94,8 @@ public class ImageController {
                     content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     @PostMapping
-    public ResponseEntity<ImageResponse> saveImage(@Valid @RequestBody ImageRequest imageRequest) {
+    public ResponseEntity<ImageResponse> saveImage(@ModelAttribute @Valid ImageRequest imageRequest) {
+        System.out.println(imageRequest);
         var response = service.save(imageRequest);
         URI url = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.getImageId()).toUri();
         return ResponseEntity.created(url).body(response);
