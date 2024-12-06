@@ -2,6 +2,7 @@ package com.github.apoioSolidario.config;
 
 import com.github.apoioSolidario.security.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,76 +19,78 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
-
+    @Value("${server.servlet.context-path}")
+    String contextPath;
     @Autowired
     SecurityFilter securityFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
-                /*.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequest -> authorizeRequest
-                        .requestMatchers(HttpMethod.GET,"/api/v1/ongs/${id}").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/v1/ongs/user/{id}").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/v1//ongs/handler/{handler}").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/v1/ongs/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/api/v1/ongs").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/v1/ongs").hasRole("ADMIN")
+                        //ONGS
+                        .requestMatchers(HttpMethod.GET,contextPath+"ongs/user/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,contextPath+"ongs/handler/${handler}").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.PUT,contextPath+"ongs/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,contextPath+"ongs").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,contextPath+"ongs").hasRole("ADMIN")
+                        //ONGSOCIAL
+                        .requestMatchers(HttpMethod.GET,contextPath+"ongSocials").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,contextPath+"ongSocials/ong/{id}").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.GET,contextPath+"ongSocials/${id}").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.PUT,contextPath+"ongSocials/*").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.POST,contextPath+"ongSocials").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.DELETE,contextPath+"ongSocials").hasAnyRole("ADMIN","ONG")
+                        //IMAGES
+                        .requestMatchers(HttpMethod.GET,contextPath+"images").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,contextPath+"images/${id}").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.PUT,contextPath+"images/*").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.POST,contextPath+"images/ongs/${id}").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.DELETE,contextPath+"images").hasAnyRole("ADMIN","ONG")
+                        //LOCATIONS
+                        .requestMatchers(HttpMethod.GET,contextPath+"locations/${id}",contextPath+"locations").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,contextPath+"locations/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,contextPath+"locations").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,contextPath+"locations").hasRole("ADMIN")
+                        //CAMPANHA
+                        .requestMatchers(HttpMethod.GET,contextPath+"campaigns/ong/${id}",contextPath+"campaigns/handler/${handler}").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.PUT,contextPath+"campaigns/*").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.POST,contextPath+"campaigns").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.DELETE,contextPath+"campaigns").hasAnyRole("ADMIN","ONG")
+                        //EVENTS
+                        .requestMatchers(HttpMethod.GET,contextPath+"events/handler/${handler}",contextPath+"/events/ong/{id}").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.GET,contextPath+"events/location/${id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,contextPath+"events/*").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.POST,contextPath+"events").hasAnyRole("ADMIN","ONG")
+                        .requestMatchers(HttpMethod.DELETE,contextPath+"events").hasAnyRole("ADMIN","ONG")
+                        //FEEDBACKS
+                        .requestMatchers(HttpMethod.GET,contextPath+"feedbacks").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,contextPath+"feedbacks/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,contextPath+"feedbacks").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,contextPath+"feedbacks").hasRole("ADMIN")
+                        //USER
+                        .requestMatchers(HttpMethod.GET, contextPath+"users",contextPath+"users/${id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, contextPath+"users/${id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, contextPath+"users/${id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/users").permitAll()
+                        //ROTAS LIVRES
+                        .requestMatchers(HttpMethod.GET,"/events","/events/${id}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/campaigns","/campaigns/${id}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/ongs","/ongs/${id}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/feedbacks/${id}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/feedbacks/event/${id}","/feedbacks/campaign/{id}").permitAll()
 
-                        .requestMatchers(HttpMethod.GET,"/api/v1/ongSocials/${id}").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/v1/ongSocials/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/api/v1/ongSocials").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/v1/ongSocials").hasRole("ADMIN")
-
-                        .requestMatchers(HttpMethod.GET,"/api/v1/feedbacks/${id}").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/v1/feedbacks/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/api/v1/feedbacks").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/v1/feedbacks").hasRole("ADMIN")
-
-                        .requestMatchers(HttpMethod.GET,"/api/v1/images/${id}").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/v1/images/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/api/v1/images/ongs").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/v1/images").hasRole("ADMIN")
-
-                        .requestMatchers(HttpMethod.GET,"/api/v1/locations/${id}").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/v1/locations/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/api/v1/locations").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/v1/locations").hasRole("ADMIN")
-
-                        .requestMatchers(HttpMethod.GET,"/api/v1/campaigns/${id}").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/v1/campaigns/handler/{handler}").hasAnyRole("ADMIN")
-
-                        .requestMatchers(HttpMethod.PUT,"/api/v1/campaigns/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/api/v1/campaigns").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/v1/campaigns").hasRole("ADMIN")
-
-                        .requestMatchers(HttpMethod.GET,"/api/v1/events/${id}").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/v1//events/handler/{handler}").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/v1/events/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/api/v1/events").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/v1/events").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/Logout").hasRole("ADMIN")
-
-                        .requestMatchers(HttpMethod.GET, "/api/v1/users/${id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/${id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/${id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
-
-
-
-
-                        .requestMatchers(HttpMethod.GET,"/events").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/campaigns").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/ongs").permitAll()
+                        //AUTH
+                        .requestMatchers(HttpMethod.POST, contextPath+"auth/Logout").hasAnyRole("ADMIN","ONG")
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/reset-password").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/auth/reset-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/reset-password/confirm").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                       // .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
 
+                        //SWAGGER
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
-                ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)*/
+                ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
     @Bean

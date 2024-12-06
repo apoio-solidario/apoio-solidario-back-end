@@ -4,6 +4,7 @@ import com.github.apoioSolidario.dto.mapper.GenericMapper;
 import com.github.apoioSolidario.dto.request.OngRequest;
 import com.github.apoioSolidario.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.dto.response.OngResponse;
+import com.github.apoioSolidario.exception.AccessDeniedException;
 import com.github.apoioSolidario.model.Ong;
 import com.github.apoioSolidario.exception.EntityNotFoundException;
 import com.github.apoioSolidario.exception.UniqueDataException;
@@ -27,11 +28,13 @@ public class OngService {
     private final OngRepository repository;
     private final UserRepository userRepository;
     private final GenericMapper mapper;
+    private final TokenService tokenService;
 
-    public OngService(OngRepository repository, GenericMapper mapper,UserRepository userRepository) {
+    public OngService(OngRepository repository, UserRepository userRepository, GenericMapper mapper, TokenService tokenService) {
         this.repository = repository;
-        this.mapper = mapper;
         this.userRepository = userRepository;
+        this.mapper = mapper;
+        this.tokenService = tokenService;
     }
 
     public Page<OngResponse> findAll(Pageable pageable) {
@@ -50,6 +53,9 @@ public class OngService {
     @Transactional()
     public OngResponse findByHandler(String handler) {
         var entity = repository.findByHandler(handler).orElseThrow(() -> new EntityNotFoundException(String.format("Ong com handler %s não encontrada", handler)));
+        if(!checkAccessOng(entity.getUser().getUserId())){
+            throw new AccessDeniedException("Acesso negado ao recurso solicitado");
+        }
         return  mapper.toObject(entity, OngResponse.class);
     }
 
@@ -83,12 +89,21 @@ public class OngService {
         entity.setUpdatedAt(LocalDateTime.now());
         entity.setStatus(ongRequest.getStatus());
         return mapper.toObject(repository.save(entity), OngResponse.class);
+
     }
 
     public void deleteById(@Valid UUID id) {
         var entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, "Ong"));
         repository.delete(entity);
     }
+
+
+    public boolean checkAccessOng(UUID userId) {
+        var logado = tokenService.getPrincipal();
+        return tokenService.isAdmin() || logado.getUserId().equals(userId);
+    }
+
+
 
 
 }

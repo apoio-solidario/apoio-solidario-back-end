@@ -8,6 +8,7 @@ import com.github.apoioSolidario.model.Campaign;
 import com.github.apoioSolidario.model.Event;
 import com.github.apoioSolidario.model.Feedback;
 import com.github.apoioSolidario.exception.EntityNotFoundException;
+import com.github.apoioSolidario.model.Ong;
 import com.github.apoioSolidario.repository.CampaignRepository;
 import com.github.apoioSolidario.repository.EventRepository;
 import com.github.apoioSolidario.repository.FeedbackRepository;
@@ -27,12 +28,14 @@ public class FeedbackService {
     private final FeedbackMapper mapper;
     private final CampaignRepository campaignRepository;
     private final EventRepository eventRepository;
+    private final TokenService tokenService;
 
-    public FeedbackService(FeedbackRepository repository, FeedbackMapper mapper, CampaignRepository campaignRepository, EventRepository eventRepository) {
+    public FeedbackService(FeedbackRepository repository, FeedbackMapper mapper, CampaignRepository campaignRepository, EventRepository eventRepository, TokenService tokenService) {
         this.repository = repository;
         this.mapper = mapper;
         this.campaignRepository = campaignRepository;
         this.eventRepository = eventRepository;
+        this.tokenService = tokenService;
     }
 
     public FeedbackResponse findById(UUID id) {

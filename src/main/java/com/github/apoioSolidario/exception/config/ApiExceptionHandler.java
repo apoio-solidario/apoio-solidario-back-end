@@ -43,6 +43,12 @@ public class ApiExceptionHandler{
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request,HttpStatus.BAD_REQUEST,ex.getMessage()));
     }
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorMessage> accessDeniedException(AccessDeniedException ex, HttpServletRequest request){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request,HttpStatus.FORBIDDEN,ex.getMessage()));
+    }
 
     @ExceptionHandler(TokenExpiredException.class)
     public ResponseEntity<ErrorMessage> tokenExpiredException(TokenExpiredException ex, HttpServletRequest request){
