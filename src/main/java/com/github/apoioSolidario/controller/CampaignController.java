@@ -43,8 +43,8 @@ public class CampaignController {
             @ApiResponse(responseCode = "200", description = "Todas as campanhas recuperadas com sucesso")
     })
     @GetMapping
-    public ResponseEntity<List<CampaignResponse>> getAllCampaigns(Pageable pageable) {
-        Page<CampaignResponse> campanhas = service.findAll(pageable);
+    public ResponseEntity<List<CampaignResponse>> getAllCampaigns(Pageable pageable,@RequestParam(required = false) String title,@RequestParam(required = false) String status) {
+        Page<CampaignResponse> campanhas = service.findAll(pageable,title,status);
         List<CampaignResponse> campanhasResponse = campanhas.getContent();
         HttpHeaders headers = responseUtils.getHeaders(campanhas);
         return ResponseEntity.ok().headers(headers).body(campanhasResponse);

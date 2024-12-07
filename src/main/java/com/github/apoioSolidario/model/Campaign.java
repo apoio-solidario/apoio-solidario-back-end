@@ -58,4 +58,9 @@ public class Campaign implements Serializable {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Campaign(String title, String status) {
+        this.title = title;
+        this.status = status;
+    }
 }

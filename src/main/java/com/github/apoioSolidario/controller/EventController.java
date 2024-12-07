@@ -42,8 +42,8 @@ public class EventController {
             @ApiResponse(responseCode = "200", description = "Todos os eventos recuperados com sucesso")
     })
     @GetMapping
-    public ResponseEntity<List<EventResponse>> getAllEvents(Pageable pageable) {
-        Page<EventResponse> events = service.findAll(pageable);
+    public ResponseEntity<List<EventResponse>> getAllEvents(Pageable pageable,@RequestParam(required = false) String title,@RequestParam(required = false) String status) {
+        Page<EventResponse> events = service.findAll(pageable, title, status);
         List<EventResponse> eventResponses = events.getContent();
         HttpHeaders headers = responseUtils.getHeaders(events);
         return ResponseEntity.ok().headers(headers).body(eventResponses);

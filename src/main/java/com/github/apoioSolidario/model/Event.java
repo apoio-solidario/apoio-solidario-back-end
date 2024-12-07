@@ -54,4 +54,9 @@ public class Event implements Serializable {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Event(String title, String status) {
+        this.title = title;
+        this.status = status;
+    }
 }

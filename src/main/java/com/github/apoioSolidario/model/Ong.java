@@ -55,4 +55,10 @@ public class Ong implements Serializable {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Ong(String name, String category, String status) {
+        this.name = name;
+        this.category = category;
+        this.status = status;
+    }
 }
