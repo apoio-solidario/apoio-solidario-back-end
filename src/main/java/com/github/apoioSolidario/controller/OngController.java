@@ -39,8 +39,8 @@ public class OngController {
     @Operation(summary = "Recuperar todas as organizações")
     @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso")
     @GetMapping
-    public ResponseEntity<List<OngResponse>> getAllOngs(Pageable pageable) {
-        Page<OngResponse> ongs = ongService.findAll(pageable);
+    public ResponseEntity<List<OngResponse>> getAllOngs(Pageable pageable, @RequestParam(required = false) String status,@RequestParam(required = false) String category,@RequestParam(required = false) String name) {
+        Page<OngResponse> ongs = ongService.findAll(pageable,category,status,name);
         List<OngResponse> ongResponses = ongs.getContent();
         HttpHeaders headers = responseUtils.getHeaders(ongs);
         return ResponseEntity.ok().headers(headers).body(ongResponses);

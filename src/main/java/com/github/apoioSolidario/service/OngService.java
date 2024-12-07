@@ -1,6 +1,7 @@
 package com.github.apoioSolidario.service;
 
 import com.github.apoioSolidario.dto.mapper.GenericMapper;
+import com.github.apoioSolidario.dto.mapper.OngMapper;
 import com.github.apoioSolidario.dto.request.OngRequest;
 import com.github.apoioSolidario.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.dto.response.OngResponse;
@@ -10,6 +11,7 @@ import com.github.apoioSolidario.exception.EntityNotFoundException;
 import com.github.apoioSolidario.exception.UniqueDataException;
 import com.github.apoioSolidario.repository.OngRepository;
 import com.github.apoioSolidario.repository.UserRepository;
+import com.github.apoioSolidario.repository.querybuilder.EntityQueryBuilderImpl;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,18 +28,21 @@ public class OngService {
 
     private final OngRepository repository;
     private final UserRepository userRepository;
-    private final GenericMapper mapper;
+    private final OngMapper mapper;
     private final TokenService tokenService;
+    private final EntityQueryBuilderImpl<Ong> ongQueryBuilder;
 
-    public OngService(OngRepository repository, UserRepository userRepository, GenericMapper mapper, TokenService tokenService) {
+    public OngService(OngRepository repository, UserRepository userRepository, OngMapper mapper, TokenService tokenService, EntityQueryBuilderImpl<Ong> ongQueryBuilder) {
         this.repository = repository;
         this.userRepository = userRepository;
         this.mapper = mapper;
         this.tokenService = tokenService;
+        this.ongQueryBuilder = ongQueryBuilder;
     }
 
-    public Page<OngResponse> findAll(Pageable pageable) {
-        return mapper.toPage(repository.findAll(pageable), OngResponse.class);
+    public Page<OngResponse> findAll(Pageable pageable, String category, String status,String name) {
+        Example<Ong> query = ongQueryBuilder.makeQuery(new Ong(name,category,status));
+        return mapper.toPage(repository.findAll(query,pageable), OngResponse.class);
     }
 
     public OngResponse findById(UUID id) {

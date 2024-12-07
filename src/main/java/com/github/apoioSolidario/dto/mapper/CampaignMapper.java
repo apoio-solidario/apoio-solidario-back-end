@@ -24,5 +24,7 @@ public class CampaignMapper extends AbstractMapper{
             }
         });
 
+
+
     }
 }

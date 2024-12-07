@@ -12,8 +12,10 @@ import com.github.apoioSolidario.exception.EntityNotFoundException;
 import com.github.apoioSolidario.repository.EventRepository;
 import com.github.apoioSolidario.repository.LocationRepository;
 import com.github.apoioSolidario.repository.OngRepository;
+import com.github.apoioSolidario.repository.querybuilder.EntityQueryBuilderImpl;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,17 +31,20 @@ public class EventService {
     private final OngRepository ongRepository;
     private final EventMapper mapper;
     private final TokenService tokenService;
+    private final EntityQueryBuilderImpl<Event> eventQueryBuilder;
 
-    public EventService(EventRepository repository, LocationRepository locationRepository, OngRepository ongRepository, EventMapper mapper, TokenService tokenService) {
+    public EventService(EventRepository repository, LocationRepository locationRepository, OngRepository ongRepository, EventMapper mapper, TokenService tokenService, EntityQueryBuilderImpl<Event> eventQueryBuilder) {
         this.repository = repository;
         this.locationRepository = locationRepository;
         this.ongRepository = ongRepository;
         this.mapper = mapper;
         this.tokenService = tokenService;
+        this.eventQueryBuilder = eventQueryBuilder;
     }
 
-    public Page<EventResponse> findAll(Pageable pageable) {
-        return mapper.toPage(repository.findAll(pageable), EventResponse.class);
+    public Page<EventResponse> findAll(Pageable pageable,String title,String status) {
+        Example<Event> query = eventQueryBuilder.makeQuery(new Event(title,status));
+        return mapper.toPage(repository.findAll(query,pageable), EventResponse.class);
     }
 
     public EventResponse findById(UUID id) {
@@ -102,7 +107,7 @@ public class EventService {
         }
         repository.delete(entity);
     }
-
+    @Transactional
     public EventResponse updateStatus(@Valid UUID id, @Valid UpdateStatusRequest request) {
         Event entity = repository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(id, "event")

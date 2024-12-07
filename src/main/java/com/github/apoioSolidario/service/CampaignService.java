@@ -8,12 +8,15 @@ import com.github.apoioSolidario.dto.response.EventResponse;
 import com.github.apoioSolidario.dto.response.OngResponse;
 import com.github.apoioSolidario.exception.AccessDeniedException;
 import com.github.apoioSolidario.model.Campaign;
+import com.github.apoioSolidario.model.Event;
 import com.github.apoioSolidario.model.Ong;
 import com.github.apoioSolidario.exception.EntityNotFoundException;
 import com.github.apoioSolidario.repository.CampaignRepository;
 import com.github.apoioSolidario.repository.OngRepository;
+import com.github.apoioSolidario.repository.querybuilder.EntityQueryBuilderImpl;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,12 +31,14 @@ public class CampaignService {
     private final OngRepository ongRepository;
     private final CampaignMapper mapper;
     private final TokenService tokenService;
+    private final EntityQueryBuilderImpl<Campaign> campaignQueryBuilder;
 
-    public CampaignService(CampaignRepository repository, OngRepository ongRepository, CampaignMapper mapper, TokenService tokenService) {
+    public CampaignService(CampaignRepository repository, OngRepository ongRepository, CampaignMapper mapper, TokenService tokenService, EntityQueryBuilderImpl<Campaign> campaignQueryBuilder) {
         this.repository = repository;
         this.ongRepository = ongRepository;
         this.mapper = mapper;
         this.tokenService = tokenService;
+        this.campaignQueryBuilder = campaignQueryBuilder;
     }
 
     public CampaignResponse findById(UUID id) {
@@ -86,6 +91,7 @@ public class CampaignService {
 
         return mapper.toObject(repository.save(entity),CampaignResponse.class);
     }
+    @Transactional
     public CampaignResponse updateStatus(@Valid UUID id, @Valid UpdateStatusRequest request) {
         Campaign entity  = repository.findById(id).orElseThrow(
                 ()->new EntityNotFoundException(id,"campaign")
@@ -107,9 +113,11 @@ public class CampaignService {
         repository.delete(entity);
     }
 
-    public Page<CampaignResponse> findAll(Pageable pageable) {
-        return  mapper.toPage(repository.findAll(pageable), CampaignResponse.class);
+    public Page<CampaignResponse> findAll(Pageable pageable,String title,String status) {
+        Example<Campaign> query = campaignQueryBuilder.makeQuery(new Campaign(title,status));
+        return  mapper.toPage(repository.findAll(query,pageable), CampaignResponse.class);
     }
+
     @Transactional
     public Page<CampaignResponse> finByOngId(UUID id, Pageable pageable) {
         if(!checkAccessOngCampaign(id)){
