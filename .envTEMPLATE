@@ -1,4 +1,4 @@
-.envTEMPLATE# API Configuration
+# API Configuration
 API_CORS=http://localhost:4200
 API_NAME=Apoio-Solidario
 API_PORT=8080
@@ -15,6 +15,14 @@ DB_DRIVER=<drive>
 
 # Application Profile
 PROFILE=dev
+
+# Mail Configuration
+MAIL_HOST=
+MAIL_PORT=
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_AUTH=
+MAIL_START_TLS=
 
 # Swagger Configuration
 SWAGGER_LINK=/swagger-ui/index.html
