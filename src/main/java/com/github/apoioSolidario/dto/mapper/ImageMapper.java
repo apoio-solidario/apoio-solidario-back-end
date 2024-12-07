@@ -17,7 +17,6 @@ public class ImageMapper extends AbstractMapper {
                     protected void configure() {
                         map(null,destination.getImageId());
                         map(source.getImageName(), destination.getImageName());
-                        map(source.getImageUrl(), destination.getImageUrl());
                     }
                 });
 

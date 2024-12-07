@@ -26,6 +26,11 @@ spring:
     properties:
       mail.smtp.auth: ${MAIL_AUTH}
       mail.smtp.starttls.enable: ${MAIL_START_TLS}
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
 
   # Configura��es de JPA/Hibernate
   jpa:
@@ -40,7 +45,11 @@ spring:
 # Configura��es do swagger
 springdoc:
   swagger-ui:
-      path: ${SWAGGER_LINK}
+    path: ${SWAGGER_LINK}
+cloudinary:
+  api_key: ${CLOUDINARY_KEY}
+  api_secret: ${CLOUDINARY_SECRET}
+  cloud_name: ${CLOUDINARY_NAME}
 
 
 

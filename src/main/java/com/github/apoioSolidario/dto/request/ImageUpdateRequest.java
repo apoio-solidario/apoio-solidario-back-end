@@ -13,14 +13,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class ImageRequest {
+public class ImageUpdateRequest {
     @NotBlank(message = "O nome da imagem não pode estar vazio.")
     @Size(max = 255, message = "O nome da imagem deve ter no máximo 255 caracteres.")
     @JsonProperty("image_name")
     private String imageName;
     @JsonProperty("entity_id")
     private UUID entityId;
-    @NotNull
     private MultipartFile file;
 
 }
