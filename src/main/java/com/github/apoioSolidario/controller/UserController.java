@@ -37,18 +37,6 @@ public class UserController {
         this.responseUtils = responseUtils;
     }
 
-    @Operation(summary = "Registrar um novo usuário no sistema")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário registrado com sucesso")
-    })
-    @PostMapping()
-    public ResponseEntity<UserResponse> register(@RequestBody @Valid UserRequest userRequestDTO) {
-        UserResponse responseDTO = userService.save(userRequestDTO);
-        URI url = ServletUriComponentsBuilder.fromCurrentRequest().path("${id}").buildAndExpand(responseDTO.getUserId()).toUri();
-        return ResponseEntity.created(url).body(responseDTO);
-    }
-
-
     @Operation(summary = "Recuperar todos os usuarios")
     @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso")
     @GetMapping

@@ -10,11 +10,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${spring.web.cors.allowed-origins}")
     private String cors;
 
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(cors)
-                .allowedMethods("GET", "POST", "PUT", "DELETE");
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowCredentials(true);
     }
 }

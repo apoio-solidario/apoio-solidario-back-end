@@ -14,5 +14,5 @@ public class UserResponse {
     @JsonProperty("user_id")
     private UUID userId;
     private String username;
-    private String password;
-    private UserRole role;}
+    private UserRole role;
+}

@@ -6,14 +6,12 @@ import com.github.apoioSolidario.dto.response.UserResponse;
 import com.github.apoioSolidario.exception.EntityNotFoundException;
 import com.github.apoioSolidario.exception.TokenExpiredException;
 import com.github.apoioSolidario.exception.UserAlreadyExistException;
-import com.github.apoioSolidario.model.Ong;
 import com.github.apoioSolidario.model.Token;
 import com.github.apoioSolidario.model.User;
 import com.github.apoioSolidario.repository.OngRepository;
 import com.github.apoioSolidario.repository.TokenRepository;
 import com.github.apoioSolidario.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,15 +28,35 @@ public class AuthService implements UserDetailsService {
     private final MailService mailService;
     private final OngRepository ongRepository;
     private final TokenRepository tokenRepository;
+    private final GenericMapper genericMapper;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, MailService mailService, OngRepository ongRepository, TokenRepository tokenRepository) {
+    public AuthService(
+        UserRepository userRepository,
+        PasswordEncoder passwordEncoder,
+        MailService mailService,
+        OngRepository ongRepository,
+        TokenRepository tokenRepository,
+        GenericMapper genericMapper
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.mailService = mailService;
         this.ongRepository = ongRepository;
         this.tokenRepository = tokenRepository;
+        this.genericMapper = genericMapper;
     }
 
+    public UserResponse save(UserRequest request) {
+        if (userRepository.findByUsername(request.getUsername()) != null){
+            throw new UserAlreadyExistException("Usuario já cadastrado");
+        }
+
+        String encryptedPass = passwordEncoder.encode(request.getPassword());
+        request.setPassword(encryptedPass);
+
+        User newUser = genericMapper.toObject(request, User.class);
+        return genericMapper.toObject(userRepository.save(newUser), UserResponse.class);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

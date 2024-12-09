@@ -20,22 +20,12 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final GenericMapper genericMapper;;
+    private final GenericMapper genericMapper;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, GenericMapper genericMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.genericMapper = genericMapper;
-    }
-
-    public UserResponse save(UserRequest request) {
-        if (userRepository.findByUsername(request.getUsername()) != null){
-            throw new UserAlreadyExistException("Usuario já cadastrado");
-        }
-        String encriptPass = passwordEncoder.encode(request.getPassword());
-        request.setPassword(encriptPass);
-        User newUser = genericMapper.toObject(request, User.class);
-        return genericMapper.toObject(userRepository.save(newUser), UserResponse.class);
     }
 
     public Page<UserResponse> findAll(Pageable pageable) {
