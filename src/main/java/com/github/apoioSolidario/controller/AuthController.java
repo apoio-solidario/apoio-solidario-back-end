@@ -59,12 +59,8 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Regenerate session ID to prevent session fixation attacks
-        HttpSession session = request.getSession();
-        session.invalidate();
-
         // Generate new session
-        session = request.getSession(true);
+        var session = request.getSession(true);
         session.setAttribute("username", authRequest.getUsername());
 
         var user = (User) authentication.getPrincipal();
