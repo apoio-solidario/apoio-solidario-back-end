@@ -3,6 +3,7 @@ package com.github.apoioSolidario.dto.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.apoioSolidario.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Data
@@ -13,7 +14,7 @@ import lombok.*;
 public class AuthRegisterRequest {
     @NotBlank
     private String username;
-    @NotBlank
+    @NotNull
     private UserRole role;
     @NotBlank
     private String password;
