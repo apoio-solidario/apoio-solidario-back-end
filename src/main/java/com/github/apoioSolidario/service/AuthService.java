@@ -1,8 +1,8 @@
 package com.github.apoioSolidario.service;
 
 import com.github.apoioSolidario.dto.mapper.GenericMapper;
-import com.github.apoioSolidario.dto.request.UserRequest;
-import com.github.apoioSolidario.dto.response.UserResponse;
+import com.github.apoioSolidario.dto.request.AuthRegisterRequest;
+import com.github.apoioSolidario.dto.response.AuthResponse;
 import com.github.apoioSolidario.exception.EntityNotFoundException;
 import com.github.apoioSolidario.exception.TokenExpiredException;
 import com.github.apoioSolidario.exception.UserAlreadyExistException;
@@ -12,7 +12,6 @@ import com.github.apoioSolidario.repository.OngRepository;
 import com.github.apoioSolidario.repository.TokenRepository;
 import com.github.apoioSolidario.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,12 +30,12 @@ public class AuthService implements UserDetailsService {
     private final GenericMapper genericMapper;
 
     public AuthService(
-        UserRepository userRepository,
-        PasswordEncoder passwordEncoder,
-        MailService mailService,
-        OngRepository ongRepository,
-        TokenRepository tokenRepository,
-        GenericMapper genericMapper
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            MailService mailService,
+            OngRepository ongRepository,
+            TokenRepository tokenRepository,
+            GenericMapper genericMapper
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -46,8 +45,8 @@ public class AuthService implements UserDetailsService {
         this.genericMapper = genericMapper;
     }
 
-    public UserResponse save(UserRequest request) {
-        if (userRepository.findByUsername(request.getUsername()) != null){
+    public AuthResponse save(AuthRegisterRequest request) {
+        if (userRepository.findByUsername(request.getUsername()) != null) {
             throw new UserAlreadyExistException("Usuario já cadastrado");
         }
 
@@ -55,11 +54,11 @@ public class AuthService implements UserDetailsService {
         request.setPassword(encryptedPass);
 
         User newUser = genericMapper.toObject(request, User.class);
-        return genericMapper.toObject(userRepository.save(newUser), UserResponse.class);
+        return genericMapper.toObject(userRepository.save(newUser), AuthResponse.class);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
     }
 
@@ -69,17 +68,19 @@ public class AuthService implements UserDetailsService {
         if (user == null) {
             throw new EntityNotFoundException("User not found");
         }
-        System.out.println("userid:" + user.getUserId());
-        var entity = ongRepository.findByUser_UserId(user.getUserId()).orElseThrow(() -> new EntityNotFoundException("Ong atrelada ao usuario não encontrada"));
-        System.out.println(entity.getEmail());
+
+        var entity = ongRepository.findByUser_UserId(user.getUserId()).orElseThrow(
+                () -> new EntityNotFoundException("Ong atrelada ao usuario não encontrada")
+        );
+
         Token token = new Token();
         token.setUser(user);
         token.setToken(UUID.randomUUID().toString());
         token.setExpired(false);
-        String resetLink = "http://localhost:8080/api/v1/auth/redefinir-senha/confirmar?token=" + token.getToken();
         tokenRepository.save(token);
+        
+        String resetLink = "http://localhost:8080/api/v1/auth/redefinir-senha/confirmar?token=" + token.getToken();
         mailService.sendEmail(entity.getEmail(), "Redefinir Senha", "Clique no link para redefinir sua senha: " + resetLink);
-
     }
 
     public void resetPassword(String token, String novaSenha) {

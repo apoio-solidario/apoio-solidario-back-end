@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class AuthRequest {
+public class AuthLoginRequest {
     @NotBlank
     private String username;
     @NotBlank

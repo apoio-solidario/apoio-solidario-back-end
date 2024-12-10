@@ -1,9 +1,9 @@
 package com.github.apoioSolidario.controller;
 
-import com.github.apoioSolidario.dto.request.AuthRequest;
-import com.github.apoioSolidario.dto.request.UserRequest;
+import com.github.apoioSolidario.dto.request.AuthLoginRequest;
+import com.github.apoioSolidario.dto.request.AuthRegisterRequest;
 import com.github.apoioSolidario.dto.response.AuthResponse;
-import com.github.apoioSolidario.dto.response.UserResponse;
+import com.github.apoioSolidario.model.User;
 import com.github.apoioSolidario.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,8 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -39,8 +39,8 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "Usuário registrado com sucesso")
     })
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@RequestBody @Valid UserRequest userRequestDTO) {
-        UserResponse responseDTO = authService.save(userRequestDTO);
+    public ResponseEntity<AuthResponse> register(@RequestBody @Valid AuthRegisterRequest userRequestDTO) {
+        AuthResponse responseDTO = authService.save(userRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
@@ -49,14 +49,14 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "Login realizado com sucesso")
     })
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid AuthRequest authRequest, HttpServletRequest request) {
+    public ResponseEntity<?> login(@RequestBody @Valid AuthLoginRequest authRequest, HttpServletRequest request) {
         HttpSession currentSession = request.getSession(false);
         if (currentSession != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("An active session already exists. Please log out first to create a new session.");
         }
 
         var authToken = new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword());
-        var authentication = authenticationManager.authenticate(authToken);
+        Authentication authentication = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // Regenerate session ID to prevent session fixation attacks
@@ -67,7 +67,15 @@ public class AuthController {
         session = request.getSession(true);
         session.setAttribute("username", authRequest.getUsername());
 
-        return ResponseEntity.ok(new AuthResponse(authRequest.getUsername(), session.getMaxInactiveInterval()));
+        var user = (User) authentication.getPrincipal();
+        var response = new AuthResponse();
+        response.setUserId(user.getUserId());
+        response.setUsername(user.getUsername());
+        response.setFirstName(user.getFirstName());
+        response.setLastName(user.getLastName());
+        response.setEmail(user.getEmail());
+        response.setRole(user.getRole());
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Recuperar senha de um usuário no sistema")
@@ -124,7 +132,14 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
         }
 
-        UserDetails user = authService.loadUserByUsername(username);
-        return ResponseEntity.ok(user);
+        User user = authService.loadUserByUsername(username);
+        var response = new AuthResponse();
+        response.setUserId(user.getUserId());
+        response.setUsername(user.getUsername());
+        response.setFirstName(user.getFirstName());
+        response.setLastName(user.getLastName());
+        response.setEmail(user.getEmail());
+        response.setRole(user.getRole());
+        return ResponseEntity.ok(response);
     }
 }
