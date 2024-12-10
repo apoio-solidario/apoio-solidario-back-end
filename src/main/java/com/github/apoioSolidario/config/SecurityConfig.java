@@ -1,11 +1,13 @@
 package com.github.apoioSolidario.config;
 
+import com.github.apoioSolidario.service.AuthService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -80,14 +82,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, contextPath + "users", contextPath + "users/${id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, contextPath + "users/${id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, contextPath + "users/${id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, contextPath + "users").hasRole("ADMIN")
 
                         //ROTAS LIVRES
-                        .requestMatchers(HttpMethod.GET, "/events", "/events/${id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/campaigns", "/campaigns/${id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/ongs", "/ongs/${id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/feedbacks/${id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/feedbacks/event/${id}", "/feedbacks/campaign/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, contextPath + "events", "/events/${id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, contextPath + "campaigns", "/campaigns/${id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, contextPath + "ongs", "/ongs/${id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, contextPath + "feedbacks/${id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, contextPath + "feedbacks/event/${id}", "/feedbacks/campaign/{id}").permitAll()
 
                         //AUTH
                         .requestMatchers(HttpMethod.GET, "/auth/me").permitAll()
@@ -114,13 +116,16 @@ public class SecurityConfig {
     }
 
     @Bean
-    protected HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
-        return new HttpSessionSecurityContextRepository();
+    public AuthenticationManager authenticationManager(AuthService authService, PasswordEncoder passwordEncoder) throws Exception {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(authService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return new ProviderManager(provider);
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
     }
 
     @Bean
