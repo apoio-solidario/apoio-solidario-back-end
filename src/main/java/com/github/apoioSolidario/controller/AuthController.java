@@ -79,7 +79,7 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "Senha atualizada com sucesso")
     })
     @PostMapping("/reset-password")
-    public ResponseEntity<String> redefinirSenha(@RequestParam @Valid String username) {
+    public ResponseEntity<String> resetPassword(@RequestParam @Valid String username) {
         authService.gerarResetToken(username);
         return ResponseEntity.ok("Um link para redefinir sua senha foi enviado ao e-mail.");
     }
@@ -89,11 +89,9 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "Senha atualizada com sucesso")
     })
     @PostMapping("/reset-password/confirm")
-    public ResponseEntity<String> confirmPasswordReset(
-            @RequestParam String token,
-            @RequestParam String novaSenha) {
+    public ResponseEntity<String> confirmPasswordReset(@RequestParam String token, @RequestParam String newPassword) {
         try {
-            authService.resetPassword(token, novaSenha);
+            authService.resetPassword(token, newPassword);
             return ResponseEntity.ok("Senha redefinida com sucesso.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao redefinir a senha.");
