@@ -28,10 +28,8 @@ public class OngRequest {
     @Size(max = 255, message = "A URL do site deve ter no máximo 255 caracteres.")
     @JsonProperty("website_url")
     private String websiteUrl;
-    @NotBlank(message = "A imagem de perfil não pode estar vazia.")
     @JsonProperty("image_profile")
     private String imageProfile;
-    @NotBlank(message = "A imagem do banner não pode estar vazia.")
     @JsonProperty("image_banner")
     private String imageBanner;
     @NotBlank(message = "O status não pode estar vazio.")
@@ -39,7 +37,6 @@ public class OngRequest {
     private String status;
     @NotBlank(message = "A Categoria não pode estar vazia.")
     private String category;
-    @NotBlank(message = "A handler não pode estar vazia.")
     private String handler;
     @NotBlank(message = "O e-mail não pode estar vazio.")
     @Email(message = "O e-mail deve ser válido.")
@@ -48,6 +45,5 @@ public class OngRequest {
     @NotNull(message = "O ID do usuario não pode ser nulo.")
     @JsonProperty("user_id")
     private UUID userId;
-    @NotBlank(message = "O telefone não pode estar vazio.")
     private String phone;
 }

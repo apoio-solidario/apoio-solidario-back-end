@@ -74,7 +74,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, contextPath + "users", contextPath + "users/${id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, contextPath + "users/${id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, contextPath + "users/${id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, contextPath + "users/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/users/${id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, contextPath + "users/${id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, contextPath + "users/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
                         //ROTAS LIVRES
                         .requestMatchers(HttpMethod.GET, "/events", "/events/${id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/campaigns", "/campaigns/${id}").permitAll()

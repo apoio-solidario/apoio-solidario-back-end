@@ -20,12 +20,11 @@ public class Feedback implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID feedbackId;
-    @Column(nullable = false,length = 100)
+    @Column(nullable = false, length = 100)
     private String username;
-    @Column(nullable = false,length = 100)
+    @Column(nullable = false, length = 100)
     private String email;
-    @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
     @Column(nullable = false)
     private int rating;
@@ -36,7 +35,7 @@ public class Feedback implements Serializable {
     @JoinColumn(name = "campaign_id")
     private Campaign campaign;
     @CreatedDate
-    @Column(name = "Submitted_at")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
     @LastModifiedDate
     @Column(name = "updated_at")

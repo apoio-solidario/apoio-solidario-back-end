@@ -64,6 +64,7 @@ public class CampaignService {
             throw new AccessDeniedException("Acesso negado ao recurso solicitado");
         }
         entity.setOng(ong);
+        entity.setHandler(toSlug((entity.getTitle())));
         entity.setCreatedAt(LocalDateTime.now());
         entity.setUpdatedAt(LocalDateTime.now());
         return mapper.toObject(repository.save(entity), CampaignResponse.class);
@@ -80,7 +81,7 @@ public class CampaignService {
         entity.setOng(ong);
         entity.setDescription(request.getDescription());
         entity.setContent(request.getContent());
-        entity.setHandler(request.getHandler());
+        entity.setHandler(toSlug(request.getTitle()));
         entity.setGoalAmount(request.getGoalAmount());
         entity.setAmountRaised(request.getAmountRaised());
         entity.setStatus(request.getStatus());
@@ -89,7 +90,6 @@ public class CampaignService {
         entity.setEndData(request.getEndData());
         entity.setCreatedAt(LocalDateTime.now());
         entity.setUpdatedAt(LocalDateTime.now());
-
         return mapper.toObject(repository.save(entity), CampaignResponse.class);
     }
 
@@ -134,4 +134,20 @@ public class CampaignService {
         return tokenService.isAdmin() || ongLogada.getOngId().equals(ongId);
     }
 
+    public static String toSlug(String input) {
+        if (input == null || input.isEmpty()) {
+            return "";
+        }
+
+        // Convert to lowercase
+        String slug = input.toLowerCase();
+
+        // Replace spaces with hyphens
+        slug = slug.replaceAll("\\s+", "-");
+
+        // Remove non-alphanumeric characters (except hyphens)
+        slug = slug.replaceAll("[^a-z0-9-]", "");
+
+        return slug;
+    }
 }

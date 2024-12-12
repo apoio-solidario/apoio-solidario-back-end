@@ -26,22 +26,18 @@ public class Event implements Serializable {
     private String description;
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
-    @Column(nullable = false, name = "start_data")
+    @Column(name = "start_data")
     private LocalDateTime startData;
-    @LastModifiedDate
-    @Column(nullable = false, name = "end_data")
+    @Column(name = "end_data")
     private LocalDateTime endData;
-    @Column(nullable = false, name = "image_profile", length = 255)
+    @Column(name = "image_profile", length = 255)
     private String imageProfile;
-    @Column(nullable = false, name = "image_banner", length = 255)
+    @Column(name = "image_banner", length = 255)
     private String imageBanner;
     @Column(nullable = false, length = 50)
     private String status;
     @Column(nullable = false, name = "handler", length = 100, unique = true)
     private String handler;
-    @ManyToOne
-    @JoinColumn(name = "location_id")
-    private Location location;
     @ManyToOne
     @JoinColumn(name = "ong_id")
     private Ong ong;

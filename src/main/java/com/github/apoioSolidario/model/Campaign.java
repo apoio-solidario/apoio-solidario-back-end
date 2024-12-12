@@ -29,20 +29,19 @@ public class Campaign implements Serializable {
     private String content;
     @Column(nullable = false, name = "start_data")
     private LocalDateTime startData;
-    @LastModifiedDate
     @Column(nullable = false, name = "end_data")
     private LocalDateTime endData;
     @Column(name = "goal_amount", precision = 10, scale = 2)
     private BigDecimal goalAmount;
     @Column(name = "amount_raised", precision = 10, scale = 2)
     private BigDecimal amountRaised;
-    @Column(nullable = false, name = "image_profile", length = 255)
+    @Column(name = "image_profile")
     private String imageProfile;
-    @Column(nullable = false, name = "image_banner", length = 255)
+    @Column(name = "image_banner")
     private String imageBanner;
     @Column(nullable = false, length = 50)
     private String status;
-    @Column(nullable = false, name = "handler", length = 100, unique = true)
+    @Column(name = "handler", length = 100, unique = true)
     private String handler;
 
 

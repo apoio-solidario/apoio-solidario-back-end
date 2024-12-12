@@ -28,11 +28,11 @@ public class Ong implements Serializable {
     private String websiteUrl;
     @Column(nullable = false, length = 100)
     private String email;
-    @Column(nullable = false)
+    @Column
     private String phone;
-    @Column(nullable = false, name = "image_profile")
+    @Column(name = "image_profile")
     private String imageProfile;
-    @Column(nullable = false, name = "image_banner")
+    @Column(name = "image_banner")
     private String imageBanner;
     @Column(nullable = false, length = 50)
     private String status;

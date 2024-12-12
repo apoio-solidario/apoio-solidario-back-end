@@ -22,7 +22,7 @@ public class EventMapper extends AbstractMapper {
             @Override
             protected void configure() {
                 map(source.getOng().getOngId(), destination.getOngId());
-                map(source.getLocation().getLocationId(), destination.getLocationId());
+//                map(source.getLocation().getLocationId(), destination.getLocationId());
             }
         });
 

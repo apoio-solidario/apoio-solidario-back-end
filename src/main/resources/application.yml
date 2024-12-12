@@ -1,3 +1,16 @@
+logging:
+  level:
+    root: WARN
+    org:
+      hibernate: INFO
+      springframework:
+        web: TRACE
+        security: TRACE
+        session:
+          jdbc: TRACE
+      cache: TRACE
+      hibernate.type: TRACE
+
 # Configuração do spring security
 api:
   security:

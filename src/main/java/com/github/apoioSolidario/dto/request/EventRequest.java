@@ -24,26 +24,18 @@ public class EventRequest {
     @NotBlank(message = "O content não pode estar vazia.")
     @Size(min = 5, message = "O content deve ter no mínimo 5 caracteres.")
     private String content;
-    @NotNull(message = "A data de início não pode ser nula.")
     @JsonProperty("start_data")
     private LocalDateTime startData;
-    @NotNull(message = "A data de término não pode ser nula.")
     @JsonProperty("end_data")
     private LocalDateTime endData;
-    @NotBlank(message = "A imagem de perfil não pode estar vazia.")
     @JsonProperty("image_profile")
     private String imageProfile;
-    @NotBlank(message = "A imagem do banner não pode estar vazia.")
     @JsonProperty("image_banner")
     private String imageBanner;
     @NotBlank(message = "O status não pode estar vazio.")
     @Size(max = 50, message = "O status deve ter no máximo 50 caracteres.")
     private String status;
-    @NotBlank(message = "A handler não pode estar vazia.")
     private String handler;
-    @NotNull(message = "O ID da localização não pode ser nulo.")
-    @JsonProperty("location_id")
-    private UUID locationId;
     @NotNull(message = "O ID da ONG não pode ser nulo.")
     @JsonProperty("ong_id")
     private UUID ongId;

@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,6 +57,15 @@ public class UserController {
         return ResponseEntity.ok().body(userService.finById(id));
     }
 
+    @Operation(summary = "Registrar um novo usuário no sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário registrado com sucesso")
+    })
+    @PostMapping()
+    public ResponseEntity<UserResponse> save(@RequestBody @Valid UserRequest userRequestDTO) {
+        UserResponse responseDTO = userService.save(userRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    }
 
     @Operation(summary = "Atualizar um usuario pelo ID")
     @ApiResponses(value = {
@@ -79,8 +89,8 @@ public class UserController {
                     content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOng(@Valid @PathVariable UUID id) {
+    public ResponseEntity<String> deleteOng(@Valid @PathVariable UUID id) {
         userService.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Ok");
     }
 }

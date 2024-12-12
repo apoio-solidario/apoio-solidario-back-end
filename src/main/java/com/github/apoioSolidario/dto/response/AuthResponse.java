@@ -2,7 +2,6 @@ package com.github.apoioSolidario.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.apoioSolidario.enums.UserRole;
-import jakarta.persistence.Column;
 import lombok.*;
 
 import java.util.UUID;
@@ -13,7 +12,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @ToString
 public class AuthResponse {
-    @Column(name = "user_id")
+    @JsonProperty("user_id")
     private UUID userId;
     private String username;
     private UserRole role;

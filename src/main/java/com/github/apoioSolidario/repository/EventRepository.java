@@ -14,9 +14,10 @@ import java.util.UUID;
 public interface EventRepository extends JpaRepository<Event, UUID> {
     @Override
     Page<Event> findAll(Pageable pageable);
+
     Optional<Event> findByHandler(String handler);
 
     Page<Event> findByOng_OngId(@Valid UUID id, Pageable pageable);
-    Page<Event> findByLocation_LocationId(@Valid UUID id, Pageable pageable);
+//    Page<Event> findByLocation_LocationId(@Valid UUID id, Pageable pageable);
 
 }
