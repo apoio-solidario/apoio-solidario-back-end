@@ -3,9 +3,8 @@ package com.github.apoioSolidario.controller;
 import com.github.apoioSolidario.dto.request.CampaignRequest;
 import com.github.apoioSolidario.dto.request.UpdateStatusRequest;
 import com.github.apoioSolidario.dto.response.CampaignResponse;
-import com.github.apoioSolidario.dto.response.EventResponse;
-import com.github.apoioSolidario.service.CampaignService;
 import com.github.apoioSolidario.exception.config.ErrorMessage;
+import com.github.apoioSolidario.service.CampaignService;
 import com.github.apoioSolidario.utils.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +25,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/campaigns")
 @Tag(name = "Campanha", description = "Contém todos os métodos relacionados a campanhas.")
@@ -43,8 +44,8 @@ public class CampaignController {
             @ApiResponse(responseCode = "200", description = "Todas as campanhas recuperadas com sucesso")
     })
     @GetMapping
-    public ResponseEntity<List<CampaignResponse>> getAllCampaigns(Pageable pageable,@RequestParam(required = false) String title,@RequestParam(required = false) String status) {
-        Page<CampaignResponse> campanhas = service.findAll(pageable,title,status);
+    public ResponseEntity<List<CampaignResponse>> getAllCampaigns(Pageable pageable, @RequestParam(required = false) String title, @RequestParam(required = false) String status) {
+        Page<CampaignResponse> campanhas = service.findAll(pageable, title, status);
         List<CampaignResponse> campanhasResponse = campanhas.getContent();
         HttpHeaders headers = responseUtils.getHeaders(campanhas);
         return ResponseEntity.ok().headers(headers).body(campanhasResponse);
@@ -134,8 +135,8 @@ public class CampaignController {
                     content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCampaign(@Valid @PathVariable UUID id) {
+    public ResponseEntity<String> deleteCampaign(@Valid @PathVariable UUID id) {
         service.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("OK");
     }
 }

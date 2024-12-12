@@ -21,30 +21,28 @@ public class Campaign implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID campaignId;
-    @Column(nullable = false,length = 100)
+    @Column(nullable = false, length = 100)
     private String title;
-    @Lob
     @Column(nullable = false)
     private String description;
-    @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
     @Column(nullable = false, name = "start_data")
     private LocalDateTime startData;
     @LastModifiedDate
     @Column(nullable = false, name = "end_data")
     private LocalDateTime endData;
-    @Column( name = "goal_amount", precision = 10,scale = 2)
-    private BigDecimal goalAmount ;
-    @Column( name = "amount_raised", precision = 10,scale = 2)
-    private BigDecimal amountRaised ;
-    @Column(nullable = false, name = "image_profile",length = 255)
+    @Column(name = "goal_amount", precision = 10, scale = 2)
+    private BigDecimal goalAmount;
+    @Column(name = "amount_raised", precision = 10, scale = 2)
+    private BigDecimal amountRaised;
+    @Column(nullable = false, name = "image_profile", length = 255)
     private String imageProfile;
-    @Column(nullable = false, name = "image_banner",length = 255)
+    @Column(nullable = false, name = "image_banner", length = 255)
     private String imageBanner;
-    @Column(nullable = false,length = 50)
+    @Column(nullable = false, length = 50)
     private String status;
-    @Column(nullable = false, name = "handler",length = 100,unique = true)
+    @Column(nullable = false, name = "handler", length = 100, unique = true)
     private String handler;
 
 

@@ -20,29 +20,27 @@ public class Ong implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID ongId;
-    @Column(nullable = false,length = 100,unique = true)
+    @Column(nullable = false, length = 100, unique = true)
     private String name;
-    @Lob
     @Column(nullable = false)
     private String description;
-    @Column(nullable = true,name = "website_url",length = 255)
+    @Column(name = "website_url")
     private String websiteUrl;
-    @Column(nullable = false,length = 100)
+    @Column(nullable = false, length = 100)
     private String email;
     @Column(nullable = false)
     private String phone;
-    @Column(nullable = false, name = "image_profile",length = 255)
+    @Column(nullable = false, name = "image_profile")
     private String imageProfile;
-    @Column(nullable = false, name = "image_banner",length = 255)
+    @Column(nullable = false, name = "image_banner")
     private String imageBanner;
-    @Column(nullable = false,length = 50)
+    @Column(nullable = false, length = 50)
     private String status;
-    @Column(nullable = false, name = "category",length = 100)
+    @Column(nullable = false, name = "category", length = 100)
     private String category;
-    @Column(nullable = false, name = "handler",length = 100,unique = true)
+    @Column(nullable = false, name = "handler", length = 100, unique = true)
     private String handler;
-    @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @OneToOne

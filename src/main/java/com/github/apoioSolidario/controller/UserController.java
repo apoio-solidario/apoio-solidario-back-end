@@ -17,9 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,18 +34,6 @@ public class UserController {
         this.userService = userService;
         this.responseUtils = responseUtils;
     }
-
-    @Operation(summary = "Registrar um novo usuário no sistema")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário registrado com sucesso")
-    })
-    @PostMapping()
-    public ResponseEntity<UserResponse> register(@RequestBody @Valid UserRequest userRequestDTO) {
-        UserResponse responseDTO = userService.save(userRequestDTO);
-        URI url = ServletUriComponentsBuilder.fromCurrentRequest().path("${id}").buildAndExpand(responseDTO.getUserId()).toUri();
-        return ResponseEntity.created(url).body(responseDTO);
-    }
-
 
     @Operation(summary = "Recuperar todos os usuarios")
     @ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso")
@@ -81,10 +67,9 @@ public class UserController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@Valid @PathVariable UUID id,
-                                                 @RequestBody @Valid UserRequest userRequest) {
+                                                   @RequestBody @Valid UserRequest userRequest) {
         return ResponseEntity.ok(userService.update(id, userRequest));
     }
-
 
 
     @Operation(summary = "Excluir um usuario pelo ID")

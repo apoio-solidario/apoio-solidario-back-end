@@ -4,8 +4,11 @@ import com.github.apoioSolidario.repository.UserRepository;
 import com.github.apoioSolidario.service.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +19,8 @@ import java.io.IOException;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
+    private static final Logger log = LoggerFactory.getLogger(SecurityFilter.class);
+
     private final TokenService tokenService;
     private final UserRepository userRepository;
 
@@ -26,25 +31,25 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var token = this.recoverToken(request);
-        if (token != null ) {
-            String username = tokenService.validateToken(token);
-            UserDetails user = userRepository.findByUsername(username);
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        // Get cookies from the request
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("SESSION_ID".equals(cookie.getName())) {
+                    String sessionToken = cookie.getValue();
+                    String username = tokenService.validateToken(sessionToken);
+                    if (!username.isEmpty()) {
+                        UserDetails user = userRepository.findByUsername(username);
+                        var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        return;
+                    }
+                }
+            }
         }
-        if (tokenService.isBlackListed(token)){
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
-        filterChain.doFilter(request, response);
-    }
 
-    private String recoverToken(HttpServletRequest request) {
-        var authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return null;
-        }
-        return authHeader.replace("Bearer ", "");
+        filterChain.doFilter(request, response);
     }
 }

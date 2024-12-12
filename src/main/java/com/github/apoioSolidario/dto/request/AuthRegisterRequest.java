@@ -1,25 +1,29 @@
-package com.github.apoioSolidario.dto.response;
+package com.github.apoioSolidario.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.apoioSolidario.enums.UserRole;
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class AuthResponse {
-    @Column(name = "user_id")
-    private UUID userId;
+public class AuthRegisterRequest {
+    @NotBlank
     private String username;
+    @NotNull
     private UserRole role;
+    @NotBlank
+    private String password;
+    @NotBlank
     @JsonProperty("first_name")
     private String firstName;
+    @NotBlank
     @JsonProperty("last_name")
     private String lastName;
+    @NotBlank
     private String email;
 }
